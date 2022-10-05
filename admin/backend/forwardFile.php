@@ -16,6 +16,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 echo "<script>window.alert(`You can't forward to your self.`)</script>";
                 unset($_POST['forwardFile']);
                 echo "<script>window.open('../myFile.php','_self')</script>";
+                exit();
             }
 
             $checkSql = $conn->prepare("SELECT * FROM tblfile WHERE file_track_no = ? AND file_current_holder = ?");

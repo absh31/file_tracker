@@ -21,8 +21,9 @@ if (isset($_POST['completeFile'])) {
     $completeActSql->bindParam(3, $_SESSION['id']);
     $completeActSql->bindParam(4, $completeRemarks);
     $completeActSql->execute();
-    
-    $completeSql = $conn->prepare("UPDATE `tblfile` SET `file_completed` = 1, `file_current_holder` = 0 WHERE `file_track_no` = ? ");
+    $currTime = date("Y-m-d H:i:s");
+    $completeSql = $conn->prepare("UPDATE `tblfile` SET `file_completed` = 1, `file_current_holder` = 0, `file_complete_time` = ? WHERE `file_track_no` = ? ");
+    $completeSql->bindParam(1, $currTime);
     $completeSql->bindParam(1, $fileTrack);
     $completeSql->execute(); 
     
