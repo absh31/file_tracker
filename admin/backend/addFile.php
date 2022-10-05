@@ -58,20 +58,22 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             $addActSql->bindParam(3, $fileOfficerId);
             $addActSql->execute();
 
-            $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
-            $addDocSql->bindParam(1, $fileTrack);
-            $addDocSql->bindParam(2, $fileTitle);
-            $addDocSql->bindParam(3, $fileDocPath);
-            $addDocSql->bindParam(4, $fileOfficerId);
-            $addDocSql->execute();
-
-            $fileUploadRemarks = "Document Uploaded";
-            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
-            $addActSql->bindParam(1, $fileTrack);
-            $addActSql->bindParam(2, $fileOfficerId);
-            $addActSql->bindParam(3, $fileOfficerId);
-            $addActSql->bindParam(4, $fileUploadRemarks);
-            $addActSql->execute();
+            if($DocDone == 1){
+                $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
+                $addDocSql->bindParam(1, $fileTrack);
+                $addDocSql->bindParam(2, $fileTitle);
+                $addDocSql->bindParam(3, $fileDocPath);
+                $addDocSql->bindParam(4, $fileOfficerId);
+                $addDocSql->execute();
+    
+                $fileUploadRemarks = "Document Uploaded";
+                $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
+                $addActSql->bindParam(1, $fileTrack);
+                $addActSql->bindParam(2, $fileOfficerId);
+                $addActSql->bindParam(3, $fileOfficerId);
+                $addActSql->bindParam(4, $fileUploadRemarks);
+                $addActSql->execute();
+            }
 
             echo "<script>window.open('../files.php','_self')</script>";
         }

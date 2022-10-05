@@ -49,10 +49,20 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         $fileadd_sql->bindParam(1, $file['file_added_by']);
                         $fileadd_sql->execute();
                         $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
-                        $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
-                        $filecurr_sql->bindParam(1, $file['file_current_holder']);
-                        $filecurr_sql->execute();
-                        $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+
+                        if ($file['file_current_holder'] == 0) {
+                            $filecurr['officer_name'] = '<div class="text-danger" >N/A</div>';
+                        } elseif ($file['file_current_holder'] == -1) {
+                            $filecurr['officer_name'] = '<div class="text-danger" >N/A</div>';
+                        } else {
+
+                            $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                            $filecurr_sql->bindParam(1, $file['file_current_holder']);
+                            $filecurr_sql->execute();
+                            $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+
+                        }
+
                         $filecat_sql = $conn->prepare("SELECT * FROM tblfilecat WHERE filecat_id = ?");
                         $filecat_sql->bindParam(1, $file['file_filecat_id']);
                         $filecat_sql->execute();
@@ -60,8 +70,8 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no'];?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no'];?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
                             <td><?php echo $filecurr['officer_name'] ?></td>
@@ -107,10 +117,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         $fileadd_sql->bindParam(1, $file['file_added_by']);
                         $fileadd_sql->execute();
                         $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
-                        $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
-                        $filecurr_sql->bindParam(1, $file['file_current_holder']);
-                        $filecurr_sql->execute();
-                        $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+                        // $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                        // $filecurr_sql->bindParam(1, $file['file_current_holder']);
+                        // $filecurr_sql->execute();
+                        // $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
                         $filecat_sql = $conn->prepare("SELECT * FROM tblfilecat WHERE filecat_id = ?");
                         $filecat_sql->bindParam(1, $file['file_filecat_id']);
                         $filecat_sql->execute();
@@ -118,13 +128,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no'];?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no'];?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
                             <td><?php echo $fileadd['officer_name'] ?></td>
                             <td><?php echo $file['file_time'] ?></td>
-                            <td><?php echo $file['file_complete_time']?></td>
+                            <td><?php echo $file['file_complete_time'] ?></td>
                         </tr>
                     <?php $sr_no++;
                     } ?>
@@ -158,10 +168,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         $fileadd_sql->bindParam(1, $file['file_added_by']);
                         $fileadd_sql->execute();
                         $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
-                        $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
-                        $filecurr_sql->bindParam(1, $file['file_current_holder']);
-                        $filecurr_sql->execute();
-                        $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+                        // $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                        // $filecurr_sql->bindParam(1, $file['file_current_holder']);
+                        // $filecurr_sql->execute();
+                        // $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
                         $filecat_sql = $conn->prepare("SELECT * FROM tblfilecat WHERE filecat_id = ?");
                         $filecat_sql->bindParam(1, $file['file_filecat_id']);
                         $filecat_sql->execute();
@@ -169,8 +179,8 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no'];?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no'];?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
                         </tr>

@@ -14,39 +14,19 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 ?>
         <br>
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h5>Track File</h5>
-                </div>
-            </div>
-            <br>
-            <form action="./trackFile.php" method="GET">
-                <div class="row">
-                    <table class="table align-middle">
-                        <tbody>
-                            <tr>
-                                <td>File Tracking No.</td>
-                                <td><input class="form-control" type="text" name="trackNo" id="track_no" required></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="col text-center">
-                        <input class="btn btn-dark px-5" type="submit" name="trackFile" value="Track">
-                    </div>
-            </form>
-
             <?php
-            if (isset($_GET['trackFile'])) {
+            if (isset($_GET['trackNo'])) {
 
                 $trackNo = $_GET['trackNo'];
-                $sql = $conn->prepare("SELECT * FROM `tblfile` WHERE file_track_no =?");
+                $sql = $conn->prepare("SELECT * FROM `tblfile` WHERE file_track_no =? AND file_current_holder = ?");
                 $sql->bindParam(1, $trackNo);
+                $sql->bindParam(2, $_SESSION['id']);
                 $sql->execute();
                 $key = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($sql->rowCount() == 0) {
-                    echo "<div class='col-md-12 text text-danger text-center'><br>No file found with Tracking No :  $trackNo</div>";
+                    echo "<script>window.alert(`Bad Request`)</script>";
+                    echo "<script>window.open('./myFile.php','_self')</script>";
                 } else {
-
 
                     $filesql = $conn->prepare("SELECT * FROM `tblfilecat` WHERE filecat_id = ?");
                     $filesql->bindParam(1, $key['file_filecat_id']);
@@ -57,7 +37,6 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     $addedsql->bindParam(1, $key['file_added_by']);
                     $addedsql->execute();
                     $addedkey = $addedsql->fetch(PDO::FETCH_ASSOC);
-
 
                     if ($key['file_current_holder'] == 0) {
                         $currkey['officer_name'] = '<div class="text-danger" >N/A</div>';
@@ -81,9 +60,6 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     $docs = $docsql->fetchAll(PDO::FETCH_ASSOC);
 
             ?>
-                    <br>
-                    <br>
-                    <br>
                     <hr>
                     <h5>File Details</h5>
                     <br><br>
@@ -107,7 +83,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             </tr>
                             <tr>
                                 <td>File Category</td>
-                                <td colspan="3"><?php echo $catkey['filecat_name']; ?></td>
+                                <td colspan="3"><a href="<?php echo './fileCat.php?id=' . $catkey['filecat_id']; ?>" target="_blank"><?php echo $catkey['filecat_name']; ?></td>
                             </tr>
                             <tr>
                                 <td>File Added By</td>
@@ -162,6 +138,73 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         </tbody>
                     </table>
                     <br>
+                    <div class="row text-center">
+                        <div class="col">
+                            <form class="form form-control" action="./backend/fileUpload.php" class="form form-control" enctype="multipart/form-data" method="POST">
+                                File Upload
+                                <br><br>
+                                <label>File Title</label>
+                                <input type="text" class="form-control" name="fileTitle" required />
+                                <br><br>
+                                <input type="file" name="upFile" class="form-control" required>
+                                <br><br>
+                                <input type="text" name="fileTrack" value="<?php echo $key['file_track_no']; ?>" hidden />
+                                <input type="submit" name="fileUpload" class="btn btn-dark" value="Upload">
+                                <br><br>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form class="form form-control" action="./backend/forwardFile.php" method="POST">
+                                <label>Select Department</label>
+                                <br>
+                                <select name="forwardDept" id="" class="form-control" onChange="getOfficers(this.value)">
+                                    <option disabled selected>Choose Department</option>
+                                    <?php
+                                    $deptSql = $conn->prepare("SELECT * FROM tbldept WHERE dept_active = 1");
+                                    $deptSql->execute();
+                                    $departments = $deptSql->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($departments as $department) {
+                                    ?>
+                                        <option value="<?php echo $department['dept_id'] ?>"><?php echo $department['dept_name'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <label>Select Officer</label>
+                                <br>
+                                <select class="form-control" id="officerDrop" name="forwardOfficer" required>
+                                </select>
+                                <br>
+                                <input type="text" name="fileTrack" value="<?php echo $key['file_track_no']; ?>" hidden required />
+                                <label>Forward Remarks</label>
+                                <br>
+                                <input type="text" name="forwardRemarks" class="form-control" required/>
+                                <br>
+                                <input class="btn btn-dark px-4" type="submit" name="forwardFile" value="Forward">
+                                <br>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form class="form form-control" action="./backend/completeFile.php" method="POST">
+                                <lable>Remarks</lable>
+                                <br><br>
+                                <br><br>
+                                <input class="form-control" type="text" name="completeRemarks" required>
+                                <br><br>
+                                <br><br>
+                                <input type="text" name="fileTrack" value="<?php echo $key['file_track_no']; ?>" hidden />
+                                <input class="btn btn-success px-4" type="submit" name="completeFile" value="Mark as Complete">
+                                <br><br>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col">
+                            <a href="./myFile.php" class="btn btn-danger px-4 mx-4">Cancel</a>
+                        </div>
+                    </div>
                     <hr>
                     <h5>Activity Details</h5>
                     <br><br>
@@ -222,12 +265,26 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         <?php include '../footer.php'; ?>
         <script>
             document.getElementById('my-nav').classList.remove('active');
-            document.getElementById('file-nav').classList.add('active');
+            document.getElementById('file-nav').classList.remove('active');
             document.getElementById("manage-nav").classList.remove('active');
             document.getElementById("dash-nav").classList.remove('active');
             $(document).ready(function() {
                 $('#myTable').DataTable();
             });
+
+            function getOfficers(deptId) {
+                $.ajax({
+                        method: "POST",
+                        url: "./backend/getOfficers.php",
+                        dataType: "html",
+                        data: {
+                            deptId: deptId
+                        }
+                    })
+                    .done(function(data) {
+                        $("#officerDrop").html(data);
+                    });
+            }
         </script>
 <?php }
 } else {

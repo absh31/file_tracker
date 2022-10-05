@@ -23,7 +23,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         <div class="row">
             <h5 class="text-bold text-danger">Recieved Files<br></h5>
             <?php
-            $file_sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_to = ? AND a.activity_ack = 0 AND a.activity_type = 'Forwarded' AND f.file_completed = 0 GROUP BY a.activity_file_track_no ORDER BY a.activity_time DESC");
+            $file_sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_to = ? AND a.activity_ack = 0 AND a.activity_type = 'Forwarded' AND f.file_completed = 0 AND a.activity_file_track_no = f.file_track_no GROUP BY a.activity_file_track_no ORDER BY a.activity_time DESC;");
             $file_sql->bindParam(1, $_SESSION['id']);
             $file_sql->execute();
             $files = $file_sql->fetchAll(PDO::FETCH_ASSOC);
@@ -36,10 +36,8 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         <th scope="col">Title</th>
                         <th scope="col">Concerned Person</th>
                         <th scope="col">Category</th>
-                        <th scope="col">Current Holder</th>
-                        <th scope="col">Added By</th>
-                        <th scope="col">Added Time</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Recieved Time</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,10 +48,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         $fileadd_sql->bindParam(1, $file['file_added_by']);
                         $fileadd_sql->execute();
                         $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
-                        $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
-                        $filecurr_sql->bindParam(1, $file['file_current_holder']);
-                        $filecurr_sql->execute();
-                        $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+
                         $filecat_sql = $conn->prepare("SELECT * FROM tblfilecat WHERE filecat_id = ?");
                         $filecat_sql->bindParam(1, $file['file_filecat_id']);
                         $filecat_sql->execute();
@@ -61,16 +56,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no']; ?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><?php echo $file['file_track_no']; ?></td>
+                            <td><?php echo $file['file_title']; ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
-                            <td><?php echo $filecurr['officer_name'] ?></td>
-                            <td><?php echo $fileadd['officer_name'] ?></td>
                             <td><?php echo $file['activity_time'] ?></td>
                             <td>
-                                <a href="editFile.php?id=<?php echo $file['file_id'] ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
-                                <button class="btn btn-danger text-light delete" id="<?php echo $file['file_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                <a href="ackFile.php?id=<?php echo $file['file_id'] ?>&actId=<?php echo $file['activity_id'] ;?>&trackNo=<?php echo $file['file_track_no'];?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
                             </td>
                         </tr>
                     <?php $sr_no++;
@@ -96,9 +88,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         <th scope="col">Title</th>
                         <th scope="col">Concerned Person</th>
                         <th scope="col">Category</th>
-                        <th scope="col">Added By</th>
-                        <th scope="col">Added Time</th>
-                        <th scope="col">Completed Time</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,13 +110,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no']; ?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><?php echo $file['file_track_no']; ?></td>
+                            <td><?php echo $file['file_title']; ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
-                            <td><?php echo $fileadd['officer_name'] ?></td>
-                            <td><?php echo $file['file_time'] ?></td>
-                            <td><?php echo $file['file_complete_time'] ?></td>
+                            <td>
+                                <a href="workFile.php?trackNo=<?php echo $file['file_track_no']; ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
+                            </td>
                         </tr>
                     <?php $sr_no++;
                     } ?>
@@ -177,7 +167,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
                             <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no']; ?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
                         </tr>
@@ -213,10 +203,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         $fileadd_sql->bindParam(1, $file['file_added_by']);
                         $fileadd_sql->execute();
                         $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
-                        $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
-                        $filecurr_sql->bindParam(1, $file['file_current_holder']);
-                        $filecurr_sql->execute();
-                        $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+                        // $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                        // $filecurr_sql->bindParam(1, $file['file_current_holder']);
+                        // $filecurr_sql->execute();
+                        // $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
                         $filecat_sql = $conn->prepare("SELECT * FROM tblfilecat WHERE filecat_id = ?");
                         $filecat_sql->bindParam(1, $file['file_filecat_id']);
                         $filecat_sql->execute();
@@ -225,7 +215,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
                             <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
-                            <td><a href="./viewFile.php?id=<?php echo $file['file_track_no']; ?>" target="_blank"><?php echo $file['file_title'] ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
                             <td><?php echo $file['file_person_name'] ?></td>
                             <td><?php echo $filecat['filecat_name'] ?></td>
                         </tr>

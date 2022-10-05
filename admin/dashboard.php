@@ -16,16 +16,18 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
             <h3 class="dept-title">Dashboard</h3>
             <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
                 <div class="row">
-                    <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Count</h6>
+                    <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Added</h6>
                     <div class="col-sm">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
                                     <?php
-                                    $deptCountSql = $conn->prepare("SELECT COUNT(*) AS dept_cnt FROM tbldept WHERE dept_active = 1");
-                                    $deptCountSql->execute();
-                                    $deptCount = $deptCountSql->fetch();
-                                    echo (int)$deptCount['dept_cnt'];
+                                    $today = date('Y-m-d'); 
+                                    $todayCountSql = $conn->prepare("SELECT COUNT(*) AS today_cnt FROM tblfile WHERE file_time LIKE ?");
+                                    $todayCountSql->bindParam(1, $today);
+                                    $todayCountSql->execute();
+                                    $todayCount = $todayCountSql->fetch();
+                                    echo (int)$todayCount['today_cnt'];
                                     ?>
                                 </h5>
                                 <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">Today</p>
@@ -37,11 +39,11 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
                             <div class="card-body">
                                 <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
                                     <?php
-                                    $roleCountSql = $conn->prepare("SELECT DISTINCT(COUNT(role_name)) AS count FROM tblrole WHERE role_active = 1");
-                                    $roleCountSql->execute();
-                                    $rolesCount = $roleCountSql->fetch();
-
-                                    echo $rolesCount['count'];
+                                    $weekCountSql = $conn->prepare("SELECT COUNT(*) AS week_cnt FROM tblfile WHERE DATEDIFF(?, file_time) <= 7");
+                                    $weekCountSql->bindParam(1, $today);
+                                    $weekCountSql->execute();
+                                    $weekCount = $weekCountSql->fetch();
+                                    echo (int)$weekCount['week_cnt'];
                                     ?>
                                 </h5>
                                 <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">This Week</p>
@@ -53,10 +55,11 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
                             <div class="card-body">
                                 <h5 class="card-title text-center  font-weight-bold" style="font-size: 60px; color: #003975;">
                                     <?php
-                                    $officerCountSql = $conn->prepare("SELECT COUNT(*) AS count FROM tblofficer WHERE officer_active = 1");
-                                    $officerCountSql->execute();
-                                    $officerCount = $officerCountSql->fetch();
-                                    echo $officerCount['count'];
+                                    $weekCountSql = $conn->prepare("SELECT COUNT(*) AS week_cnt FROM tblfile WHERE DATEDIFF(?, file_time) <= 30");
+                                    $weekCountSql->bindParam(1, $today);
+                                    $weekCountSql->execute();
+                                    $weekCount = $weekCountSql->fetch();
+                                    echo (int)$weekCount['week_cnt'];
                                     ?>
                                 </h5>
                                 <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">This Month</p>
