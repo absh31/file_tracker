@@ -65,6 +65,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     <?php include '../footer.php'; ?>
 
     <script>
+        document.getElementById('my-nav').classList.remove('active');
         document.getElementById('file-nav').classList.remove('active');
         document.getElementById("manage-nav").classList.add('active');
         document.getElementById("dash-nav").classList.remove('active');
@@ -89,6 +90,6 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 <?php
 } else {
     echo "<script>window.alert(`Don't peep!`)</script>";
-    echo "<script>window.open('../login.php','_self')</script>";
+    echo "<script>window.open('../','_self')</script>";
 }
 ?>

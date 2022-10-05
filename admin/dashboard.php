@@ -180,6 +180,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
     </div>
     <br><br>
     <script>
+        document.getElementById('my-nav').classList.remove('active');
         document.getElementById("file-nav").classList.remove('active');
         document.getElementById("manage-nav").classList.remove('active');
         document.getElementById("dash-nav").classList.add('active');

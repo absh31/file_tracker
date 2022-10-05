@@ -29,7 +29,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 $role_sql->execute();
                 $roles = $role_sql->fetchAll(PDO::FETCH_ASSOC);
                 ?>
-                <table class="table table-bordered">
+                <table class="table" id="myTable">
                     <thead>
                         <tr>
                             <th scope="col">Sr. No.</th>
@@ -62,6 +62,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         <?php include '../footer.php'; ?>
 
         <script>
+            document.getElementById('my-nav').classList.remove('active');
             document.getElementById("file-nav").classList.remove('active');
             document.getElementById("manage-nav").classList.add('active');
             document.getElementById("dash-nav").classList.remove('active');
@@ -82,10 +83,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     }
                 })
             });
+            $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
         </script>
 <?php }
 } else {
     echo "<script>window.alert(`Don't peep!`)</script>";
-    echo "<script>window.open('../login.php','_self')</script>";
+    echo "<script>window.open('../','_self')</script>";
 }
 ?>

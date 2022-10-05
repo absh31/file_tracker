@@ -87,6 +87,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     <?php include '../footer.php'; ?>
 
     <script>
+        document.getElementById('my-nav').classList.remove('active');
         document.getElementById('file-nav').classList.add('active');
         document.getElementById("manage-nav").classList.remove('active');
         document.getElementById("dash-nav").classList.remove('active');

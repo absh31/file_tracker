@@ -31,10 +31,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         }
     } else {
         echo "<script>window.alert(`Don't peep!`)</script>";
-        echo "<script>window.open('../login.php','_self')</script>";
+        echo "<script>window.open('../','_self')</script>";
     }
 } else {
     echo "<script>window.alert(`Don't peep!`)</script>";
-    echo "<script>window.open('../login.php','_self')</script>";
+    echo "<script>window.open('../','_self')</script>";
 }
 ?>

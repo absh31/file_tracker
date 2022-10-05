@@ -26,6 +26,9 @@
                             <li><a class="dropdown-item" href="./fileCategory.php">File Category</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a id="my-nav" class="nav-link active" aria-current="page" href="myFile.php">My Files</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="file-nav" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Files

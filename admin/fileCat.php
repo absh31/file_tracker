@@ -49,17 +49,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <td>Document</td>
                             <?php if ($key['filecat_doc_path'] != ''){
                                  ?>
-                            <td><a class="btn btn-dark" href="<?php echo $key['filecat_doc_path']; ?>" target="_blank">View</a></td>
+                            <td><a class="btn btn-dark" href="../uploads<?php echo $key['filecat_doc_path']; ?>" target="_blank">View</a></td>
                                 <?php }else{
                                     ?>
                                     <td class="text text-danger">No Document</td>
                                 <?php
                                 }
                                 ?>
-                        </tr>
-                        <tr>
-                            <td>Remarks</td>
-                            <td><?php echo $key['filecat_remarks']; ?></td>
                         </tr>
 
                     </tbody>
@@ -72,6 +68,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         <br><br>
         <?php include '../footer.php'; ?>
         <script>
+            document.getElementById('my-nav').classList.remove('active');
             document.getElementById('file-nav').classList.remove('active');
             document.getElementById("manage-nav").classList.add('active');
             document.getElementById("dash-nav").classList.remove('active');
@@ -79,6 +76,6 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 <?php }
 } else {
     echo "<script>window.alert(`Don't peep!`)</script>";
-    echo "<script>window.open('../login.php','_self')</script>";
+    echo "<script>window.open('../','_self')</script>";
 }
 ?>
