@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 <?php include '../footer.php'; ?>
 
 <script>
-    document.getElementById('file-nav').classList.remove('active');
+    document.getElementById('file-nav').classList.add('active');
     document.getElementById("my-nav").classList.remove('active');
-    document.getElementById("dash-nav").classList.add('active');
+    document.getElementById("dash-nav").classList.remove('active');
 </script>

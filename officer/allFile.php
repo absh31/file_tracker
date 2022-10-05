@@ -12,6 +12,6 @@ if (!isset($_SESSION['username'])) {
 
 <script>
     document.getElementById('file-nav').classList.remove('active');
-    document.getElementById("my-nav").classList.remove('active');
-    document.getElementById("dash-nav").classList.add('active');
+    document.getElementById("my-nav").classList.add('active');
+    document.getElementById("dash-nav").classList.remove('active');
 </script>
