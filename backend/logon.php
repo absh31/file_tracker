@@ -17,21 +17,22 @@ if (isset($_POST['AuthLogin'])) {
         } else {
             $uname = htmlspecialchars($_POST['username']);
             $pass = md5($_POST['password']);
-            $type = htmlspecialchars($_POST['type']);
-            $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ? AND `officer_password` = ? AND `officer_role_id` = ?");
+            // $type = htmlspecialchars($_POST['type']);
+            $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ? AND `officer_password` = ?");
 
             $sql->bindParam(1, $uname);
             $sql->bindParam(2, $pass);
-            $sql->bindParam(3, $type);
+            // $sql->bindParam(3, $type);
             $sql->execute();
             $key = $sql->fetch(PDO::FETCH_ASSOC);
 
             if ($sql->rowCount() > 0) {
+                $type = $key['officer_role_id'];
                 $_SESSION['officer_name'] = $key['officer_name'];
                 $_SESSION['username'] = $uname;
                 $_SESSION['auth'] = $type;
-                $_SESSION['id'] = $key['officer_id'];
                 if ($type == '1'){
+                    $_SESSION['id'] = $key['officer_id'];
                     echo "<script>window.open('../admin/dashboard.php','_self')</script>";
                 }else{
                     echo "<script>window.open('../officer/redirect.php','_self')</script>";

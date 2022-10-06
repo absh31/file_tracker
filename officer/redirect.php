@@ -5,41 +5,53 @@ if (!isset($_SESSION['username'])) {
 } else {
     include("../connection.php");
     include "../header.php";
+    unset($_SESSION['id']);
 ?>
     <br>
     <div class="container">
         <div class="row">
             <div class="col">
                 <h5>Hey, <?= ucwords($_SESSION['officer_name']) ?></h5>
+
             </div>
-            <!-- <h3 class="dept-title">Select Role :</h3> -->
-            <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
-                <div class="row">
-                    <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Select Role</h6>
+        </div>
+        <!-- <h3 class="dept-title">Select Role :</h3> -->
+        <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
+            <div class="row">
+                <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Select Role</h6>
+                <?php
+                $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ?");
+                $sql->bindParam(1, $_SESSION['username']);
+                $sql->execute();
+                $keys = $sql->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($keys as $key) {
+
+                ?>
                     <div class="col-sm">
                         <div class="card">
-                            <a href="#">
-                            <div class="card-body">
-                                <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
-                                    <?php
-                                    $today = date('Y-m-d');
-                                    $todayCountSql = $conn->prepare("SELECT COUNT(*) AS today_cnt FROM tblfile WHERE file_time LIKE ?");
-                                    $todayCountSql->bindParam(1, $today);
-                                    $todayCountSql->execute();
-                                    $todayCount = $todayCountSql->fetch();
-                                    echo (int)$todayCount['today_cnt'];
-                                    ?>
-                                </h5>
-                                <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">Today</p>
-                            </div>
-</a>
+
+                                <div class="card-body">
+                                    <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
+                                        <?php
+                                        echo "Department : " . $key['officer_dept_id'] . "<br>";
+                                        echo "<a href='../officer/backend/redirect.php?id=" . $key['officer_id'] . "'>Login</a>";
+                                        ?>
+                                    </h5>
+                                </div>
                         </div>
                     </div>
-                </div>
-                <br>
+                <?php
+                }
+                ?>
             </div>
-
+            <br>
         </div>
+        <div class="row">
+            <div class="col text-right">
+                <a class="btn btn-dark" href="../logout.php">Logout</a>
+            </div>
+        </div>
+    </div>
     </div>
     <br><br>
     <script>
