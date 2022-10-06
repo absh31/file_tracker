@@ -2,7 +2,7 @@
 session_start();
 include '../../connection.php';
 if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
-    if (isset($_POST['addFile'])) {
+    if (isset($_POST['addFile']) && $_SESSION['id']) {
         $fileTitle = htmlspecialchars($_POST['fileTitle']);
         $filePerson = htmlspecialchars($_POST['filePerson']);
         $fileDesc = htmlspecialchars($_POST['fileDesc']);
@@ -15,6 +15,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
         $fileDoc = $_FILES['fileDoc']['name'];
         $fileDocPath = '';
+        $DocDone = 0;
 
         if ($fileDoc != '') {
             $fileSize = $_FILES['fileDoc']['size'];
@@ -47,7 +48,6 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         $addFileSql->bindParam(9, $fileRemarks);
         if ($addFileSql->execute()) {
             echo "<script>window.alert(`File Added Successfully`)</script>";
-            // echo "<script>window.open('../files.php','_self')</script>";
         }
 
         $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, '', 'Added', 1)");
@@ -56,20 +56,22 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         $addActSql->bindParam(3, $fileOfficerId);
         $addActSql->execute();
 
-        $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
-        $addDocSql->bindParam(1, $fileTrack);
-        $addDocSql->bindParam(2, $fileTitle);
-        $addDocSql->bindParam(3, $fileDocPath);
-        $addDocSql->bindParam(4, $fileOfficerId);
-        $addDocSql->execute();
-
-        $fileUploadRemarks = "Document Uploaded";
-        $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
-        $addActSql->bindParam(1, $fileTrack);
-        $addActSql->bindParam(2, $fileOfficerId);
-        $addActSql->bindParam(3, $fileOfficerId);
-        $addActSql->bindParam(4, $fileUploadRemarks);
-        $addActSql->execute();
+        if ($DocDone == 1){
+            $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
+            $addDocSql->bindParam(1, $fileTrack);
+            $addDocSql->bindParam(2, $fileTitle);
+            $addDocSql->bindParam(3, $fileDocPath);
+            $addDocSql->bindParam(4, $fileOfficerId);
+            $addDocSql->execute();
+    
+            $fileUploadRemarks = "Document Uploaded";
+            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
+            $addActSql->bindParam(1, $fileTrack);
+            $addActSql->bindParam(2, $fileOfficerId);
+            $addActSql->bindParam(3, $fileOfficerId);
+            $addActSql->bindParam(4, $fileUploadRemarks);
+            $addActSql->execute();
+        }
 
         echo "<script>window.open('../myFile.php','_self')</script>";
     }

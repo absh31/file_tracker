@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../connection.php';
-if (isset($_POST['completeFile'])) {
+if (isset($_POST['completeFile']) && $_SESSION['id']) {
 
     $completeRemarks = $_POST['completeRemarks'];
     $fileTrack = $_POST['fileTrack'];

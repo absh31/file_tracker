@@ -17,6 +17,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
             $fileDoc = $_FILES['fileDoc']['name'];
             $fileDocPath = '';
+            $DocDone = 0;
 
             if ($fileDoc != '') {
                 $fileSize = $_FILES['fileDoc']['size'];
@@ -75,7 +76,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 $addActSql->execute();
             }
 
-            echo "<script>window.open('../files.php','_self')</script>";
+            echo "<script>window.open('../myFile.php','_self')</script>";
         }
     }
 } else {

@@ -57,10 +57,16 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     $addedsql->execute();
                     $addedkey = $addedsql->fetch(PDO::FETCH_ASSOC);
 
-                    $currsql = $conn->prepare("SELECT * FROM `tblofficer` WHERE officer_id = ?");
-                    $currsql->bindParam(1, $key['file_current_holder']);
-                    $currsql->execute();
-                    $currkey = $currsql->fetch(PDO::FETCH_ASSOC);
+                    if ($key['file_current_holder'] == 0) {
+                        $currkey['officer_name'] = '<div class="text-danger" >N/A</div>';
+                    } elseif ($key['file_current_holder'] == -1) {
+                        $currkey['officer_name'] = '<div class="text-danger" >N/A</div>';
+                    } else {
+                        $currsql = $conn->prepare("SELECT * FROM `tblofficer` WHERE officer_id = ?");
+                        $currsql->bindParam(1, $key['file_current_holder']);
+                        $currsql->execute();
+                        $currkey = $currsql->fetch(PDO::FETCH_ASSOC);
+                    }
 
                     $docsql = $conn->prepare("SELECT * FROM `tbldocument` WHERE document_file_track_no = ?");
                     $docsql->bindParam(1, $trackNo);

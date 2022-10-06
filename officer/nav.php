@@ -20,13 +20,12 @@
                             Files
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="./myFile.php">My Files</a></li>
                             <li><a class="dropdown-item" href="./addFile.php">Add File</a></li>
                             <li><a class="dropdown-item" href="./trackFile.php">Track File</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a id="my-nav" class="nav-link" aria-current="page" href="allFile.php">All Files</a>
+                        <a id="my-nav" class="nav-link" aria-current="page" href="myFile.php">My Files</a>
                     </li>
                 </ul>
                 <a href="../logout.php">

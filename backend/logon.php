@@ -34,7 +34,7 @@ if (isset($_POST['AuthLogin'])) {
                 if ($type == '1'){
                     echo "<script>window.open('../admin/dashboard.php','_self')</script>";
                 }else{
-                    echo "<script>window.open('../officer/dashboard.php','_self')</script>";
+                    echo "<script>window.open('../officer/redirect.php','_self')</script>";
                 }
             } else {
                 echo "<script>alert('Invalid Credentials')</script>";

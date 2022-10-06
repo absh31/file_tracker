@@ -52,8 +52,9 @@
             font-weight: 800;
             /* font-family: Helvetica, sans-serif; */
         }
+
         a {
-            text-decoration : none ;
+            text-decoration: none;
             font-weight: bold;
         }
     </style>
