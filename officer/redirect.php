@@ -18,23 +18,31 @@ if (!isset($_SESSION['username'])) {
         <!-- <h3 class="dept-title">Select Role :</h3> -->
         <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
             <div class="row">
-                <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Select Role</h6>
+                <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Select Session</h6>
                 <?php
                 $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ?");
                 $sql->bindParam(1, $_SESSION['username']);
                 $sql->execute();
                 $keys = $sql->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($keys as $key) {
+                    $deptsql = $conn->prepare("SELECT * FROM `tbldept` WHERE dept_id = ?");
+                    $deptsql->bindParam(1, $key['officer_dept_id']);
+                    $deptsql->execute();
+                    $deptkey = $deptsql->fetch(PDO::FETCH_ASSOC);
 
+                    $rolesql = $conn->prepare("SELECT * FROM `tblrole` WHERE role_id = ?");
+                    $rolesql->bindParam(1, $key['officer_role_id']);
+                    $rolesql->execute();
+                    $rolekey = $rolesql->fetch(PDO::FETCH_ASSOC);
                 ?>
                     <div class="col-sm">
                         <div class="card">
-
                                 <div class="card-body">
-                                    <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
+                                    <h5 class="card-title text-center font-weight-bold" style="font-size: 30px; color: #003975;">
                                         <?php
-                                        echo "Department : " . $key['officer_dept_id'] . "<br>";
-                                        echo "<a href='../officer/backend/redirect.php?id=" . $key['officer_id'] . "'>Login</a>";
+                                        echo "Department : " . $deptkey['dept_name'] . "<br>";
+                                        echo "Role : " . $rolekey['role_name'] . "<br>";
+                                        echo "<a class='btn btn-dark mt-2 px-3' href='../officer/backend/redirect.php?id=" . $key['officer_id'] . "'>Login</a>";
                                         ?>
                                     </h5>
                                 </div>

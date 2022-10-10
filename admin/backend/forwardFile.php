@@ -5,14 +5,14 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     include "./checkAdminLogin.php";
     if (checkAdminLogin($_SESSION['auth']) == "Admin") {
         if (isset($_POST['forwardFile'])) {
-            
+
             $currHolder = '-1';
             $fileTrack = $_POST['fileTrack'];
             $forwardOfficer = $_POST['forwardOfficer'];
             $forwardRemarks = $_POST['forwardRemarks'];
             $forwardType = "Forwarded";
-            
-            if($forwardOfficer == $_SESSION['id']){
+
+            if ($forwardOfficer == $_SESSION['id']) {
                 echo "<script>window.alert(`You can't forward to your self.`)</script>";
                 unset($_POST['forwardFile']);
                 echo "<script>window.open('../myFile.php','_self')</script>";
@@ -23,10 +23,18 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             $checkSql->bindParam(1, $fileTrack);
             $checkSql->bindParam(2, $_SESSION['id']);
             $checkSql->execute();
-            if($checkSql->rowCount() == 0) {
+            if ($checkSql->rowCount() == 0) {
                 echo "<script>window.alert(`Bad Request`)</script>";
                 echo "<script>window.open('../myFile','_self')</script>";
             }
+
+            $today = date('Y-m-d H:i:s');
+            $timeTakenSql = $conn->prepare("UPDATE `tblactivity` SET `activity_time_taken` = ? WHERE `activity_file_track_no` = ? AND `activity_to` = ? AND `activity_type` IN ('Forwarded', 'Added')  AND `activity_time_taken` IS NULL");
+            $timeTakenSql->bindParam(1, $today);
+            $timeTakenSql->bindParam(2, $fileTrack);
+            $timeTakenSql->bindParam(3, $_SESSION['id']);
+            $timeTakenSql->execute();
+
             $ackSql = $conn->prepare("INSERT INTO tblactivity (activity_file_track_no, activity_from, activity_to, activity_remarks, activity_type, activity_ack) VALUES (?, ?, ?, ?, ?, 0)");
             $ackSql->bindParam(1, $fileTrack);
             $ackSql->bindParam(2, $_SESSION['id']);
@@ -38,10 +46,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 $currSql = $conn->prepare("UPDATE tblfile SET file_current_holder = ? WHERE file_track_no = ?");
                 $currSql->bindParam(1, $nullCurrentHolder);
                 $currSql->bindParam(2, $fileTrack);
-                if($currSql->execute()){
+                if ($currSql->execute()) {
                     echo "<script>window.alert(`Forwarded Successfully`)</script>";
                     echo "<script>window.open('../myFile.php','_self')</script>";
-                }    
+                }
             }
         }
     }

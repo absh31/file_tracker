@@ -25,6 +25,14 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             echo "<script>window.alert(`Bad Request`)</script>";
             echo "<script>window.open('../myFile','_self')</script>";
         }
+
+        $today = date('Y-m-d H:i:s');
+        $timeTakenSql = $conn->prepare("UPDATE `tblactivity` SET `activity_time_taken` = ? WHERE `activity_file_track_no` = ? AND `activity_to` = ? AND `activity_type` IN ('Forwarded', 'Added')  AND `activity_time_taken` IS NULL");
+        $timeTakenSql->bindParam(1, $today);
+        $timeTakenSql->bindParam(2, $fileTrack);
+        $timeTakenSql->bindParam(3, $_SESSION['id']);
+        $timeTakenSql->execute();
+
         $ackSql = $conn->prepare("INSERT INTO tblactivity (activity_file_track_no, activity_from, activity_to, activity_remarks, activity_type, activity_ack) VALUES (?, ?, ?, ?, ?, 0)");
         $ackSql->bindParam(1, $fileTrack);
         $ackSql->bindParam(2, $_SESSION['id']);

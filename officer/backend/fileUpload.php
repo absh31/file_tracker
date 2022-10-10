@@ -33,12 +33,14 @@ if (isset($_POST['fileUpload']) && $_SESSION['id']) {
             $addDocSql->bindParam(4, $_SESSION['id']);
             $addDocSql->execute();
 
+            $today = date('Y-m-d H:i:s');
             $fileUploadRemarks = "Document Uploaded";
-            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
+            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`, `activity_ack_time`) VALUES (?, ?, ?, ?, 'Uploaded', 1, ?)");
             $addActSql->bindParam(1, $fileTrack);
             $addActSql->bindParam(2, $_SESSION['id']);
             $addActSql->bindParam(3, $_SESSION['id']);
             $addActSql->bindParam(4, $fileUploadRemarks);
+            $addActSql->bindParam(5, $today);
             $addActSql->execute();
 
             echo "<script>window.open('../workFile.php?trackNo=".$fileTrack."','_self')</script>";

@@ -2,7 +2,7 @@
 <?php
 include './connection.php';
 include "header.php";
-// include "nav.php";
+include "nav.php";
 ?>
 <style>
     body {
@@ -25,27 +25,12 @@ include "header.php";
     <div class="col-md-5 mx-auto my-5 p-4 transparent" style="background : url(./uploads/images/Rectangle32.png) ">
         <div class="row">
             <div class="col text-center">
-                <h4 style="font-weight: 700; color : #000000;">File Tracker</h4>
+                <h4 style="font-weight: 700; color : #000000;">Login</h4>
                 <hr>
             </div>
         </div>
         <div class="px-3 mb-4 pt-3 apply">
             <form method="post" action="./backend/logon.php">
-                <div class="headingsall">
-                    <label name="type" style="margin-bottom : 10px; color : #000000; font-weight : 600;">Login Type</label>
-                    <select class="form-control" required="required" name="type" id="admin_type" style="border : 2px solid #000000; opacity : 0.7">
-                        <option value="" disabled selected>Select Login Type</option>
-                        <?php
-                        $sql = $conn->prepare("SELECT * FROM `tblrole` Where `role_active` = 1");
-                        $sql->execute();
-                        while ($key = $sql->fetch(PDO::FETCH_ASSOC)) {
-                        ?>
-                            <option value="<?php echo $key['role_id']; ?>"><?php echo ucwords($key['role_name']); ?></option>
-                        <?php }
-                        ?>
-
-                    </select>
-                </div>
                 <div class="mt-3 headingsall">
                     <label name="username" style="margin-bottom : 10px; color : #000000; font-weight : 600;">Username</label>
                     <!-- <label name="username">Username</label> -->

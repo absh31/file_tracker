@@ -15,11 +15,20 @@ if (isset($_POST['completeFile'])) {
         echo "<script>window.open('../myFile','_self')</script>";
     }
     
-    $completeActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Completed', 1)");
+    $today = date('Y-m-d H:i:s');
+
+    $timeTakenSql = $conn->prepare("UPDATE `tblactivity` SET `activity_time_taken` = ? WHERE `activity_file_track_no` = ? AND `activity_to` = ? AND `activity_type` IN ('Forwarded', 'Added')  AND `activity_time_taken` IS NULL");
+    $timeTakenSql->bindParam(1, $today);
+    $timeTakenSql->bindParam(2, $fileTrack);
+    $timeTakenSql->bindParam(3, $_SESSION['id']);
+    $timeTakenSql->execute();
+
+    $completeActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`, `activity_ack_time`) VALUES (?, ?, ?, ?, 'Completed', 1, ?)");
     $completeActSql->bindParam(1, $fileTrack);
     $completeActSql->bindParam(2, $_SESSION['id']);
     $completeActSql->bindParam(3, $_SESSION['id']);
     $completeActSql->bindParam(4, $completeRemarks);
+    $completeActSql->bindParam(5, $today);
     $completeActSql->execute();
     $currTime = date("Y-m-d H:i:s");
     $completeSql = $conn->prepare("UPDATE `tblfile` SET `file_completed` = 1, `file_current_holder` = 0, `file_complete_time` = ? WHERE `file_track_no` = ?");

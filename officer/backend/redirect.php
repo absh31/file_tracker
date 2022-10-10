@@ -2,7 +2,6 @@
 session_start();
 include "../../header.php";
 include '../../connection.php';
-// include './nav.php';
 
 if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     if (isset($_GET['id'])) {

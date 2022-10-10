@@ -188,7 +188,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <br><br>
                             <br><br>
                             <input type="text" name="fileTrack" value="<?php echo $key['file_track_no']; ?>" hidden />
-                            <input class="btn btn-success px-4" type="submit" name="completeFile" value="Mark as Complete">
+                            <input class="btn btn-success px-4" type="submit" name="completeFile" value="Mark as Completed">
                             <br><br>
                         </form>
                     </div>

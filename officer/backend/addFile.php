@@ -49,11 +49,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         if ($addFileSql->execute()) {
             echo "<script>window.alert(`File Added Successfully`)</script>";
         }
-
-        $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, '', 'Added', 1)");
+        $today = date("Y-m-d H:i:s");
+        $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`, `activity_ack_time`) VALUES (?, ?, ?, '', 'Added', 1, ?)");
         $addActSql->bindParam(1, $fileTrack);
         $addActSql->bindParam(2, $fileOfficerId);
         $addActSql->bindParam(3, $fileOfficerId);
+        $addActSql->bindParam(4, $today);
         $addActSql->execute();
 
         if ($DocDone == 1){
@@ -65,11 +66,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             $addDocSql->execute();
     
             $fileUploadRemarks = "Document Uploaded";
-            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`) VALUES (?, ?, ?, ?, 'Uploaded', 1)");
+            $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`, `activity_ack_time`) VALUES (?, ?, ?, ?, 'Uploaded', 1, ?)");
             $addActSql->bindParam(1, $fileTrack);
             $addActSql->bindParam(2, $fileOfficerId);
             $addActSql->bindParam(3, $fileOfficerId);
             $addActSql->bindParam(4, $fileUploadRemarks);
+            $addActSql->bindParam(5, $today);
             $addActSql->execute();
         }
 

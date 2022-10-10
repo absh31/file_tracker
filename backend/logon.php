@@ -18,7 +18,7 @@ if (isset($_POST['AuthLogin'])) {
             $uname = htmlspecialchars($_POST['username']);
             $pass = md5($_POST['password']);
             // $type = htmlspecialchars($_POST['type']);
-            $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ? AND `officer_password` = ?");
+            $sql = $conn->prepare("SELECT * FROM `tblofficer` WHERE `officer_username` = ? AND `officer_password` = ? AND `officer_active` = 1");
 
             $sql->bindParam(1, $uname);
             $sql->bindParam(2, $pass);
@@ -44,3 +44,4 @@ if (isset($_POST['AuthLogin'])) {
         }
     }
 }
+?>
