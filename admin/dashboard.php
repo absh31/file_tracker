@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
     echo "<script>window.open('../index.php','_self')</script>";
-}else{
+} else {
     include("../connection.php");
     include("../header.php");
     include("./nav.php");
@@ -22,7 +22,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
                             <div class="card-body">
                                 <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
                                     <?php
-                                    $today = date('Y-m-d'); 
+                                    $today = date('Y-m-d');
                                     $todayCountSql = $conn->prepare("SELECT COUNT(*) AS today_cnt FROM tblfile WHERE file_time LIKE ?");
                                     $todayCountSql->bindParam(1, $today);
                                     $todayCountSql->execute();
@@ -72,8 +72,8 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
 
             <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
                 <div class="row">
-                <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Status</h6>
-                    
+                    <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Status</h6>
+
                     <div class="col-sm">
                         <div class="card">
                             <div class="card-body">
@@ -126,8 +126,8 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
 
             <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
                 <div class="row">
-                <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Office</h6>
-                    
+                    <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Office</h6>
+
                     <div class="col-sm">
                         <div class="card">
                             <div class="card-body">
@@ -177,9 +177,41 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
                 </div>
                 <br>
             </div>
-
-
+            <table>
+            </table>
         </div>
+        <h5> Departments </h5>
+        <table class="table cell-border" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Pending Files</th>
+                    <th scope="col">Completed Files</th>
+                    <th scope="col">Total Files</th>
+                    <th scope="col">FT Score</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <h5> Officers </h5>
+        <table class="table cell-border" id="myTable">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Pending Files</th>
+                    <th scope="col">Completed Files</th>
+                    <th scope="col">Total Files</th>
+                    <th scope="col">FT Score</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <br><br>
     <script>
