@@ -20,7 +20,22 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             </div>
         </div>
         <br>
+
         <div class="row">
+            <div class="col text-center text-dark">
+                <h5 class="btn btn-outline-dark" id="pending_file_menu">Pending Files</h5>
+            </div>
+            <div class="col text-center text-success">
+                <h5 class="btn btn-outline-success" id="completed_file_menu">Completed Files</h5>
+            </div>
+            <div class="col text-center text-primary">
+                <h5 class="btn btn-outline-primary" id="deleted_file_menu">Deleted Files</h5>
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <div class="row" id="pending_file">
             <h5 class="text-bold">Pending Files<br></h5>
             <?php
             $file_sql = $conn->prepare("SELECT * FROM tblfile WHERE file_active = 1 AND file_completed = 0");
@@ -89,7 +104,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         </div>
 
 
-        <div class="row">
+        <div class="row" id="completed_file">
             <h5 class="text-bold">Completed Files<br></h5>
             <?php
             $file_sql = $conn->prepare("SELECT * FROM tblfile WHERE file_completed = 1 AND file_active = 1");
@@ -143,7 +158,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         </div>
 
 
-        <div class="row">
+        <div class="row" id="deleted_file">
             <h5 class="text-bold">Deleted Files<br></h5>
             <?php
             $file_sql = $conn->prepare("SELECT * FROM tblfile WHERE file_active = 0");
@@ -215,11 +230,55 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 }
             })
         });
+
+        
+        $('#pending_file').show();
+        $('#completed_file').hide();
+        $('#deleted_file').hide();
+
+        $('#pending_file_menu').click(function() {
+            $('#pending_file').show(function() {
+                $('#rpending_file_menu').addClass('active')
+            });
+            $('#completed_file').hide(function() {
+                $('#pen_file_menu').removeClass('active')
+            });
+            $('#deleted_file').hide(function() {
+                $('#deleted_file_menu').removeClass('active')
+            });
+        })
+        $('#completed_file_menu').click(function() {
+            $('#completed_file').show(function() {
+                $('#completed_file_menu').addClass('active')
+            });
+            $('#pending_file').hide(function() {
+                $('#pending_file_menu').removeClass('active')
+            });
+            $('#deleted_file').hide(function() {
+                $('#deleted_file_menu').removeClass('active')
+            });
+        })
+        $('#deleted_file_menu').click(function() {
+            $('#deleted_file').show(function() {
+                $('#deleted_file_menu').addClass('active')
+            });
+            $('#completed_file').hide(function() {
+                $('#completed_file_menu').removeClass('active')
+            });
+            $('#pending_file').hide(function() {
+                $('#pending_file_menu').removeClass('active')
+            });
+        })
+
         $(document).ready(function() {
             $('#myTable').DataTable();
             $('#myTable1').DataTable();
             $('#myTable2').DataTable();
         });
+    </script>
+
+
+
     </script>
 <?php
 } else {
