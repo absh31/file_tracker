@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
+if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
     echo "<script>window.open('../index.php','_self')</script>";
 } else {
     include("../connection.php");
@@ -177,132 +177,59 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth']) ){
                 </div>
                 <br>
             </div>
-            <table>
-            </table>
-        </div>
-        <h5> Departments </h5>
-        <table class="table cell-border" id="myTable">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Pending Files</th>
-                    <th scope="col">Completed Files</th>
-                    <th scope="col">Total Files</th>
-                    <th scope="col">FT Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <?php
-                                    $dept_sql = $conn->prepare("SELECT * FROM tbldept");
-                                   
 
-                                    $dept_sql->execute();
-                                    while($dept_arr = $dept_sql->fetch(PDO::FETCH_ASSOC)){
-                                      
-                                        ?>
-                                        <tr>
-                                            <td><?=$dept_arr['dept_name']?></td>
-                                            <td><?php
-                                                // $delaySql = $conn->prepare("SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(activity_ack_time, activity_time)))) AS delay_time FROM tblactivity WHERE activity_to = ? AND activity_type = 'FORWARDED';");
-                                                // $delaySql->bindParam(1, $dept_sql['dept_id']);
-                                                // $delaySql->execute();
-                                                // $delay = $delaySql->fetch();
-                                                // $delay_time = explode('.', $delay['delay_time']);
-                                                // echo $delay_time[0];
-                                            ?></td>
-                                            <td><?php
-                                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 0 GROUP BY f.file_track_no;");
-                                                $sql->bindParam(1,$dept_arr['dept_id']);
-                                                $sql->execute();
-                                                echo $sql->rowCount();
-                                            ?>
-                                        </td>
-                                
-                                        <td><?php
-                                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 1 GROUP BY f.file_track_no;");
-                                                $sql->bindParam(1,$dept_arr['dept_id']);
-                                                $sql->execute();
-                                                echo $sql->rowCount();
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no  GROUP BY f.file_track_no;");
-                                                $sql->bindParam(1,$dept_arr['dept_id']);
-                                                $sql->execute();
-                                                echo $sql->rowCount();
-                                            ?>
-                                        </td>
-                                            </tr>
-                                    
-                                        <?php
-                                    }
-                                    ?>
-                
-            </tbody>
-        </table>
-        <br>
-        <br>
-        <h5> Officers </h5>
-        <table class="table cell-border" id="myTable">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Pending Files</th>
-                    <th scope="col">Completed Files</th>
-                    <th scope="col">Total Files</th>
-                    <th scope="col">FT Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <?php
-                                    $dept_sql = $conn->prepare("SELECT * FROM tblofficer");
-                                    $dept_sql->execute();
-                                    $sql2 = $conn->prepare("SELECT COUNT(*) as count FROM tblfile WHERE file_completed=1 GROUP BY file_added_by;");
-                                    $sql2->execute();
-                                    
-                                    $sql4 = $conn->prepare("SELECT COUNT(*) as count FROM tblfile GROUP BY file_added_by;");
-                                    $sql4->execute();
-                                    
-                                        // $sql3=$sql3->fetch();
-                                    while($dept_arr = $dept_sql->fetch(PDO::FETCH_ASSOC) AND $sql2_arr = $sql2->fetch(PDO::FETCH_ASSOC) AND $sql4_arr = $sql4->fetch(PDO::FETCH_ASSOC))
-                                    {
-                                        $sql3 = $conn->prepare(" SELECT * FROM tblfile WHERE file_completed = 0 AND file_current_holder =1 AND file_added_by = ?;");
-                                        $sql3->bindParam(1,$dept_arr['officer_id']);
-                                        $sql3->execute();
-                                        
-                                        
-                                        ?>
-                                        <tr>
-                                            <td><?=$dept_arr['officer_name']?></td>
-                                            <td></td>
-                                            <td><?php 
-                                            echo $sql3->rowCount();
-                                            ?></td>
-                                            <td><?=$sql2_arr['count']?></td>
-                                            <td><?=$sql4_arr['count']?></td>
-                                            </tr>
-                                        <?php
-                                    }
-                                    ?>
-                
-            </tbody>
-        </table>
+            <form class="form" name="adfiles" method="POST">
+
+                <div class="row text-center ">
+                    <div class="col">
+                        <input type="date" class="form-control" id="s_date" placeholder="Start Date" name="sdate" required>
+                    </div>
+                    <div class="col">
+                        <input type="date" class="form-control" id="e_date" placeholder="End Date" name="edate" required>
+                    </div>
+                    <div class="col">
+                        <input type="button" class="btn btn-primary" value="Search" onClick=getFileList()>
+                    </div>
+                </div>
+            </form>
+
+            <div id="list">
+            </div>
+        </div>
+        <br><br>
+
     </div>
-    <br><br>
+
+    <?php include '../footer.php'; ?>
+    </body>
     <script>
         document.getElementById('my-nav').classList.remove('active');
         document.getElementById("file-nav").classList.remove('active');
         document.getElementById("manage-nav").classList.remove('active');
         document.getElementById("dash-nav").classList.add('active');
-    </script>
-    <?php include '../footer.php'; ?>
-    </body>
 
+        function getFileList() {
+            var s_date = document.getElementById("s_date").value;
+            var e_date = document.getElementById("e_date").value;
+
+
+            $.ajax({
+                    method: "POST",
+                    url: "./backend/getFileList.php",
+                    dataType: "html",
+                    data: {
+                        sdate: s_date,
+                        edate: e_date
+                    }
+                })
+                .done(function(data) {
+                    $("#list").html(data);
+                });
+        }
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
     </html>
 <?php
 }
