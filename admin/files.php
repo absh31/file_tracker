@@ -23,7 +23,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
         <div class="row">
             <div class="col text-center text-dark">
-                <h5 class="btn btn-outline-dark" id="pending_file_menu">Pending Files</h5>
+                <h5 class="btn btn-outline-dark active" id="pending_file_menu">Pending Files</h5>
             </div>
             <div class="col text-center text-success">
                 <h5 class="btn btn-outline-success" id="completed_file_menu">Completed Files</h5>
@@ -238,7 +238,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
         $('#pending_file_menu').click(function() {
             $('#pending_file').show(function() {
-                $('#rpending_file_menu').addClass('active')
+                $('#pending_file_menu').addClass('active')
             });
             $('#completed_file').hide(function() {
                 $('#pen_file_menu').removeClass('active')

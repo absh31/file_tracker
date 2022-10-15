@@ -116,7 +116,7 @@ if (!isset($_SESSION['username'])) {
                             <div class="card-body">
                                 <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
                                     <?php
-                                    $workingTimeSql = $conn->prepare("SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to = ?;");
+                                    $workingTimeSql = $conn->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to = ?;");
                                     $workingTimeSql->bindParam(1, $_SESSION['id']);
                                     $workingTimeSql->execute();
                                     $workingTime = $workingTimeSql->fetch();
