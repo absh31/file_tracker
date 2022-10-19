@@ -19,6 +19,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
         if ($fileDoc != '') {
             $fileSize = $_FILES['fileDoc']['size'];
+
+            if ($fileSize > 10485760){
+                echo '<script>alert("File Size limit exceeded.");</script>';
+                echo "<script>window.open('../addFile.php','_self')</script>";
+                exit();
+            }
+
             $fileType = $_FILES['fileDoc']['type'];
             $fileTmp = $_FILES['fileDoc']['tmp_name'];
 

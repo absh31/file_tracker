@@ -141,6 +141,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <input type="text" class="form-control" name="fileTitle" required />
                             <br><br>
                             <input type="file" name="upFile" class="form-control" required>
+                            <div style="font-size: 12px;">Max File Size : 10 MB </div>
                             <br><br>
                             <input type="text" name="fileTrack" value="<?php echo $key['file_track_no']; ?>" hidden />
                             <input type="submit" name="fileUpload" class="btn btn-dark" value="Upload">

@@ -31,7 +31,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <td><textarea class="form-control" name="fileDesc" id="dept_desc" required></textarea></td>
                         </tr>
                         <tr>
-                            <td>File Document</td>
+                            <td>File Document <div style="font-size: 12px;">Max File Size : 10 MB </div></td>
                             <td><input class="form-control" type="file" name="fileDoc"></td>
                         </tr>
                         <tr>

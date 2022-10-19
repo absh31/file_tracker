@@ -1,3 +1,4 @@
+<link href="../timeline.css" rel="stylesheet">
 <?php
 session_start();
 include "../header.php";
@@ -161,7 +162,52 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
                         </tbody>
                     </table>
+
                     <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+                    <div class="row">
+                        <h5>Activity Timeline</h5>
+                    </div>
+
+                    <div class="row mt-6 mb-6">
+                        <ul class="timeline">
+                            <?php
+                            $fileActSql = $conn->prepare("SELECT * FROM tblactivity WHERE activity_file_track_no = ?");
+                            $fileActSql->bindParam(1, $trackNo);
+                            $fileActSql->execute();
+                            $fileActs = $fileActSql->fetchAll(PDO::FETCH_ASSOC);
+                            $sr_no = 1;
+                            foreach ($fileActs as $fileAct) {
+                                $actFromSql = $conn->prepare("SELECT officer_name FROM tblofficer WHERE officer_id = ?");
+                                $actFromSql->bindParam(1, $fileAct['activity_from']);
+                                $actFromSql->execute();
+                                $actFrom = $actFromSql->fetch(PDO::FETCH_ASSOC);
+
+                                $actToSql = $conn->prepare("SELECT officer_name FROM tblofficer WHERE officer_id = ?");
+                                $actToSql->bindParam(1, $fileAct['activity_to']);
+                                $actToSql->execute();
+                                $actTo = $actToSql->fetch(PDO::FETCH_ASSOC);
+                            
+                            ?>
+                            <li data-year="<?php echo $fileAct['activity_type'] ?>" data-text="<?php echo "By ".$actFrom['officer_name']." To ".$actTo['officer_name']." ".$fileAct['activity_time'] ?>"></li>
+                            <!-- <li data-year="2018" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2019" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2020" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2021" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2021" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2021" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2021" data-text="Lorem ipsum dolor sit amet, consectetur."></li>
+                            <li data-year="2021" data-text="Lorem ipsum dolor sit amet, consectetur."></li> -->
+                            <?php
+                            }
+                            ?>
+                        </ul>
+                    </div>
+
                     <hr>
                     <h5>Activity Details</h5>
                     <br><br>

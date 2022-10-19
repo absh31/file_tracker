@@ -6,6 +6,7 @@ if (!isset($_SESSION['username'])) {
     include("../connection.php");
     include "../header.php";
     include './nav.php';
+    include '../getFT.php';
 ?>
     <br>
     <div class="container">
@@ -96,14 +97,17 @@ if (!isset($_SESSION['username'])) {
                     <div class="col-sm">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
+                                <h5 class="card-title text-center font-weight-bold" style="font-size: 40px; color: #003975;">
                                     <?php
                                     $delaySql = $conn->prepare("SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(activity_ack_time, activity_time)))) AS delay_time FROM tblactivity WHERE activity_to = ? AND activity_type = 'FORWARDED';");
                                     $delaySql->bindParam(1, $_SESSION['id']);
                                     $delaySql->execute();
                                     $delay = $delaySql->fetch();
                                     $delay_time = explode('.', $delay['delay_time']);
-                                    echo $delay_time[0];
+                                    $days= explode(':',$delay_time[0]);
+                                    $day = (int)((int)$days[0]/24);
+                                    echo $delay_time[0]." (".$day." Days)";
+                                    // echo $delay_time[0];
                                     // echo $delay['delay_time'];
                                     ?>
                                 </h5>
@@ -114,7 +118,19 @@ if (!isset($_SESSION['username'])) {
                     <div class="col-sm">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
+                                <h5 class="card-title text-center font-weight-bold" style="font-size: 40px; color: #003975;">
+                                    <?php
+                                        echo number_format(getFT($conn, $_SESSION['id']), 2);
+                                    ?>
+                                </h5>
+                                <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">FT Score</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-center font-weight-bold" style="font-size: 40px; color: #003975;">
                                     <?php
                                     $workingTimeSql = $conn->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to = ?;");
                                     $workingTimeSql->bindParam(1, $_SESSION['id']);
@@ -122,25 +138,13 @@ if (!isset($_SESSION['username'])) {
                                     $workingTime = $workingTimeSql->fetch();
                                     $working_time = explode('.',$workingTime['working_time']);
                                     // echo $workingTime['working_time'];
-                                    echo $working_time[0];
+                                    $days= explode(':',$working_time[0]);
+                                    $day = (int)((int)$days[0]/24);
+                                    echo $working_time[0]." (".$day." Days)";
+                                    // echo $working_time[0];
                                     ?>
                                 </h5>
                                 <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">Working Time</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title text-center font-weight-bold" style="font-size: 60px; color: #003975;">
-                                    <?php
-                                    $officerCountSql = $conn->prepare("SELECT COUNT(*) AS count FROM tblfile WHERE file_completed = 1");
-                                    $officerCountSql->execute();
-                                    $officerCount = $officerCountSql->fetch();
-                                    echo $officerCount['count'];
-                                    ?>
-                                </h5>
-                                <p class="card-text text-center" style="font-size: 20px; font-weight: 500;">FT Score</p>
                             </div>
                         </div>
                     </div>

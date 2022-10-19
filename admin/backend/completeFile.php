@@ -14,7 +14,8 @@ if (isset($_POST['completeFile'])) {
         echo "<script>window.alert(`Bad Request`)</script>";
         echo "<script>window.open('../myFile','_self')</script>";
     }
-    
+    $checkKey = $checkSql->fetch(PDO::FETCH_ASSOC);
+
     $today = date('Y-m-d H:i:s');
 
     $timeTakenSql = $conn->prepare("UPDATE `tblactivity` SET `activity_time_taken` = ? WHERE `activity_file_track_no` = ? AND `activity_to` = ? AND `activity_type` IN ('Forwarded', 'Added')  AND `activity_time_taken` IS NULL");
@@ -34,8 +35,22 @@ if (isset($_POST['completeFile'])) {
     $completeSql = $conn->prepare("UPDATE `tblfile` SET `file_completed` = 1, `file_current_holder` = 0, `file_complete_time` = ? WHERE `file_track_no` = ?");
     $completeSql->bindParam(1, $currTime);
     $completeSql->bindParam(2, $fileTrack);
-    $completeSql->execute(); 
-    
+    $completeSql->execute();
+
+    $ownerSql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+    $ownerSql->bindParam(1, $checkKey['file_added_by']);
+    $ownerSql->execute();
+    $owner = $ownerSql->fetch(PDO::FETCH_ASSOC);
+    $to_email = $owner['officer_email'];
+    $subject = 'File with Tracking No - '.$fileTrack.' has been completed!';
+    $message = 'Hello,<br> File with Tracking No. - '.$fileTrack.' has been completed. You can check at your end.';
+    $message .= "<br>Thank You";
+    $message .= '<br><br>Regards,<br>File Tracker Team';
+    $headers = 'From : File Tracker Team';
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    mail($to_email, $subject, $message, $headers);
+
     echo "<script>window.alert(`Marked as Done!`)</script>";
     echo "<script>window.open('../myFile.php','_self')</script>";
 }

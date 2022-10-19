@@ -7,9 +7,16 @@ if (isset($_POST['fileUpload'])) {
     $fileDocPath = '';
     $fileTrack = $_POST['fileTrack'];
     $fileTitle = $_POST['fileTitle'];
-
+    
     if ($fileDoc != '') {
         $fileSize = $_FILES['upFile']['size'];
+        
+        if ($fileSize > 10485760){
+            echo '<script>alert("File Size limit exceeded.");</script>';
+            echo "<script>window.open('../workFile.php?trackNo=".$fileTrack."','_self')</script>";
+            exit();
+        }
+
         $fileType = $_FILES['upFile']['type'];
         $fileTmp = $_FILES['upFile']['tmp_name'];
 
