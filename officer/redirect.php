@@ -3,6 +3,8 @@ session_start();
 if (!isset($_SESSION['username'])) {
     echo "<script>window.open('../index.php','_self')</script>";
 } else {
+    include('../backend/checkSession.php');
+    checkSession();
     include("../connection.php");
     include "../header.php";
     unset($_SESSION['id']);

@@ -2,6 +2,8 @@
 
 <?php
 session_start();
+include('../backend/checkSession.php');
+checkSession();
 include "../header.php";
 include '../connection.php';
 include './nav.php';

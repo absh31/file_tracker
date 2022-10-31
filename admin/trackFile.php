@@ -1,6 +1,8 @@
 <link href="../timeline.css" rel="stylesheet">
 <?php
 session_start();
+include('../backend/checkSession.php');
+checkSession();
 include "../header.php";
 include '../connection.php';
 include './nav.php';
@@ -171,6 +173,11 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
                     <div class="row">
                         <h5>Activity Timeline</h5>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
                     </div>
 
                     <div class="row mt-6 mb-6">

@@ -3,6 +3,8 @@ session_start();
 if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
     echo "<script>window.open('../index.php','_self')</script>";
 } else {
+    include('../backend/checkSession.php');
+    checkSession();
     include("../connection.php");
     include("../header.php");
     include("./nav.php");
@@ -207,9 +209,9 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
                                 $delaySql->execute();
                                 $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
                                 $delay_time = explode('.', $delay['delay_time']);
-                                $days= explode(':',$delay_time[0]);
-                                $day = (int)((int)$days[0]/24);
-                                echo $delay_time[0]." (".$day." Days)";
+                                $days = explode(':', $delay_time[0]);
+                                $day = (int)((int)$days[0] / 24);
+                                echo $delay_time[0] . " (" . $day . " Days)";
                                 ?></td>
                             <td><?php
                                 $delaySql = $conn->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?);");
@@ -217,9 +219,9 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
                                 $delaySql->execute();
                                 $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
                                 $delay_time = explode('.', $delay['working_time']);
-                                $days= explode(':',$delay_time[0]);
-                                $day = (int)((int)$days[0]/24);
-                                echo $delay_time[0]." (".$day." Days)";
+                                $days = explode(':', $delay_time[0]);
+                                $day = (int)((int)$days[0] / 24);
+                                echo $delay_time[0] . " (" . $day . " Days)";
                                 ?></td>
                             <td><?php
                                 $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 0 GROUP BY f.file_track_no;");
@@ -279,7 +281,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
             <div class="row" id="officerDetails">
 
             </div>
-            
+
             <br>
             <h5> Search Files </h5>
             <br>

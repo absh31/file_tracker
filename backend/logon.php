@@ -31,6 +31,7 @@ if (isset($_POST['AuthLogin'])) {
                 $_SESSION['officer_name'] = $key['officer_name'];
                 $_SESSION['username'] = $uname;
                 $_SESSION['auth'] = $type;
+                $_SESSION['expire'] = time() + 3600;
                 if ($type == '1'){
                     $_SESSION['id'] = $key['officer_id'];
                     echo "<script>window.open('../admin/dashboard.php','_self')</script>";
