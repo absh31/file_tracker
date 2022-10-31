@@ -48,6 +48,9 @@ include "nav.php";
                 <div class="col-md-6 mx-auto my-4 text-center">
                     <input type="submit" name="forgotPassword" class="btn text-light py-2 px-5" style="background-color : #000000" value="Reset Password" />
                 </div>
+                <div class="col-md-6 mx-auto my-4 text-center">
+                    <a href="./index.php" class="btn text-light py-2 px-5" style="background-color : #000000">Back</a>
+                </div>
             </form>
         </div>
     </div>

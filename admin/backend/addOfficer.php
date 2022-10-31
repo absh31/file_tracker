@@ -26,6 +26,19 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             $addDeptSql->bindParam(8, $officerRemarks);
             $addDeptSql->bindParam(9, $isActive);
             if ($addDeptSql->execute()) {
+                $subject = 'Your account has been created on File Tracking Portal!';
+                $message = 'Hello, '.$officerName;
+                $message .= "<br>Your account has been created with following credentials.";
+                $message .= "<br>Username : <b>".$officerUsername;
+                $message .= "</b><br>Password : <b>".$_POST['officerPassword'];
+                $message .= "</b><br>Thank You";
+                $message .= '<br><br>Regards,<br>File Tracker Team';
+                // echo $message;
+                $headers = 'From : File Tracker Team';
+                $headers .= "MIME-Version: 1.0\r\n";
+                $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+                mail($officerEmail, $subject, $message, $headers);
+                
                 echo "<script>window.alert(`Officer Added Successfully`)</script>";
                 echo "<script>window.open('../officer.php','_self')</script>";
             }

@@ -20,7 +20,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         if ($fileDoc != '') {
             $fileSize = $_FILES['fileDoc']['size'];
 
-            if ($fileSize > 10485760){
+            if ($fileSize > 10485760) {
                 echo '<script>alert("File Size limit exceeded.");</script>';
                 echo "<script>window.open('../addFile.php','_self')</script>";
                 exit();
@@ -28,6 +28,15 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 
             $fileType = $_FILES['fileDoc']['type'];
             $fileTmp = $_FILES['fileDoc']['tmp_name'];
+            $extEx = explode('.', $fileTmp);
+            $ext = $extEx[1];
+            $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
+            if (!in_array($ext, $allowedFiles)) {
+                echo '<script>alert("Please upload valid file.");</script>';
+                echo "<script>window.open('../dashboard.php','_self')</script>";
+                unset($_POST['addFile']);
+                exit();
+            }
 
             if (!file_exists('../../uploads/fileDocs')) {
                 mkdir('../../uploads/fileDocs', 0777, true);
@@ -64,14 +73,14 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         $addActSql->bindParam(4, $today);
         $addActSql->execute();
 
-        if ($DocDone == 1){
+        if ($DocDone == 1) {
             $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
             $addDocSql->bindParam(1, $fileTrack);
             $addDocSql->bindParam(2, $fileTitle);
             $addDocSql->bindParam(3, $fileDocPath);
             $addDocSql->bindParam(4, $fileOfficerId);
             $addDocSql->execute();
-    
+
             $fileUploadRemarks = "Document Uploaded";
             $addActSql = $conn->prepare("INSERT INTO `tblactivity` (`activity_file_track_no`, `activity_from`, `activity_to`, `activity_remarks`, `activity_type`, `activity_ack`, `activity_ack_time`) VALUES (?, ?, ?, ?, 'Uploaded', 1, ?)");
             $addActSql->bindParam(1, $fileTrack);

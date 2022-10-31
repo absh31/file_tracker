@@ -19,6 +19,15 @@ if (isset($_POST['fileUpload'])) {
 
         $fileType = $_FILES['upFile']['type'];
         $fileTmp = $_FILES['upFile']['tmp_name'];
+        $extEx = explode('.', $fileTmp);
+        $ext = $extEx[1]; 
+        $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
+        if (!in_array($ext, $allowedFiles)){
+            echo '<script>alert("Please upload valid file.");</script>';
+            echo "<script>window.open('../dashboard.php','_self')</script>";
+            unset($_POST['fileUpload']);
+            exit();
+        }
 
         if (!file_exists('../../uploads/fileDocs')) {
             mkdir('../../uploads/fileDocs', 0777, true);
