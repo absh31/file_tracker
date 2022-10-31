@@ -52,7 +52,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     ?>
                         <tr>
                             <th scope="row"><?php echo $sr_no; ?></th>
-                            <td><?php echo $officer['officer_name'] ?></td>
+                            <td><a href="./viewprofile.php?id=<?php echo $officer['officer_id'] ?>" target="_self"><?php echo $officer['officer_name']; ?></a></td>
                             <td><?php echo $officer['officer_username'] ?></td>
                             <td><?php echo $officer['officer_email'] ?></td>
                             <td><?php echo $officer['officer_mobile'] ?></td>
