@@ -42,8 +42,9 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             if (isset($_GET['trackFile'])) {
 
                 $trackNo = $_GET['trackNo'];
-                $sql = $conn->prepare("SELECT * FROM `tblfile` WHERE file_track_no =?");
+                $sql = $conn->prepare("SELECT * FROM tblfile f, (SELECT activity_to, activity_file_track_no FROM tblactivity WHERE activity_file_track_no = ? ) as a WHERE a.activity_file_track_no = f.file_track_no AND a.activity_to = ? GROUP BY f.file_track_no");
                 $sql->bindParam(1, $trackNo);
+                $sql->bindParam(2, $_SESSION['id']);
                 $sql->execute();
                 $key = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($sql->rowCount() == 0) {

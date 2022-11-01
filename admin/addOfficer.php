@@ -67,7 +67,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                                 <select name="officerRole" id="" class="form-control">
                                     <option disabled selected>Choose Role</option>
                                     <?php
-                                    $deptSql = $conn->prepare("SELECT * FROM tblrole WHERE role_active = 1");
+                                    $deptSql = $conn->prepare("SELECT * FROM tblrole WHERE role_active = 1 AND role_name != 'Admin'");
                                     $deptSql->execute();
                                     $roles = $deptSql->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($roles as $role) {
@@ -95,6 +95,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     <br><br>
     <?php include '../footer.php'; ?>
     </body>
+    <script>
+        document.getElementById('my-nav').classList.remove('active');
+        document.getElementById('file-nav').classList.remove('active');
+        document.getElementById("manage-nav").classList.add('active');
+        document.getElementById("dash-nav").classList.remove('active');
+    </script>
 
     </html>
 <?php

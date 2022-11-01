@@ -59,8 +59,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <td><?php echo $offRole['role_name'] ?></td>
                             <td><?php echo $officer['dept_name'] ?></td>
                             <td>
-                                <a href="editOfficer.php?id=<?php echo $officer['officer_id'] ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
-                                <button class="btn btn-danger text-light delete" id="<?php echo $officer['officer_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                <?php if($offRole['role_name'] != 'Admin'){
+                                    ?>
+                                    <a href="editOfficer.php?id=<?php echo $officer['officer_id'] ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
+                                    <button class="btn btn-danger text-light delete" id="<?php echo $officer['officer_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                    <?php
+                                } ?>
                             </td>
                         </tr>
                     <?php $sr_no++;
