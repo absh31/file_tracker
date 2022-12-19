@@ -6,7 +6,7 @@
                 <img src="../uploads/images/logo1.png" alt="">
             </div>
             <div class="col text-center mt-3">
-                <a class="navbar-brand" href="index.php" style="font-weight: 800; color:black; font-size:40;">
+                <a class="navbar-brand" href="./" style="font-weight: 800; color:black; font-size:40;">
                     FILE TRACKER
                 </a>
             </div>
@@ -18,8 +18,7 @@
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark" id="navigation" style="background-color : black">
         <div class="container-fluid">
             <!-- <a class="navbar-brand fw-bold" href="./index.php">GURUKRUPA ENTERPRISE</a> -->
-            <a class="navbar-brand" href="" style="font-weight: 800;">
-                <!-- <img src="logo.png" width="45"height="45" class="d-inline-block align-text-center" style="margin-right:2px;"> -->
+            <a class="navbar-brand" href="./" style="font-weight: 800;">
                 FILE TRACKER
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +38,7 @@
                             <li><a class="dropdown-item" href="./dept.php">Departments</a></li>
                             <li><a class="dropdown-item" href="./officer.php">Officers</a></li>
                             <li><a class="dropdown-item" href="./fileCategory.php">File Category</a></li>
+                            <li><a class="dropdown-item" href="./fileUploadType.php">File Upload </a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -55,9 +55,15 @@
                         </ul>
                     </li>
                 </ul>
+                &nbsp;
+                <a href="./changePassword.php">
+                    <button class="btn text-light border-light" name="logout" type="submit">Change Password</button>
+                </a>
+                &nbsp;&nbsp;&nbsp;
                 <a href="../logout.php">
                     <button class="btn text-light border-light" name="logout" type="submit">Logout</button>
                 </a>
+
             </div>
         </div>
     </nav>

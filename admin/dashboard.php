@@ -181,131 +181,148 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
                 </div>
                 <br>
             </div>
-            <h5> Departments </h5>
-            <table class="table cell-border" id="myTable">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Delay Time</th>
-                        <th scope="col">Processing Time</th>
-                        <th scope="col">Pending Files</th>
-                        <th scope="col">Completed Files</th>
-                        <th scope="col">Total Files</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <?php
-                    $dept_sql = $conn->prepare("SELECT * FROM tbldept WHERE dept_active = 1");
-                    $dept_sql->execute();
-                    while ($dept_arr = $dept_sql->fetch(PDO::FETCH_ASSOC)) {
-
-                    ?>
-                        <tr>
-                            <td><?= $dept_arr['dept_name'] ?></td>
-                            <td><?php
-                                $delaySql = $conn->prepare("SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(activity_ack_time, activity_time)))) AS delay_time FROM tblactivity WHERE activity_to IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND activity_type = 'FORWARDED';");
-                                $delaySql->bindParam(1, $dept_arr['dept_id']);
-                                $delaySql->execute();
-                                $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
-                                $delay_time = explode('.', $delay['delay_time']);
-                                $days = explode(':', $delay_time[0]);
-                                $day = (int)((int)$days[0] / 24);
-                                echo $delay_time[0] . " (" . $day . " Days)";
-                                ?></td>
-                            <td><?php
-                                $delaySql = $conn->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?);");
-                                $delaySql->bindParam(1, $dept_arr['dept_id']);
-                                $delaySql->execute();
-                                $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
-                                $delay_time = explode('.', $delay['working_time']);
-                                $days = explode(':', $delay_time[0]);
-                                $day = (int)((int)$days[0] / 24);
-                                echo $delay_time[0] . " (" . $day . " Days)";
-                                ?></td>
-                            <td><?php
-                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 0 GROUP BY f.file_track_no;");
-                                $sql->bindParam(1, $dept_arr['dept_id']);
-                                $sql->execute();
-                                echo $sql->rowCount();
-                                ?>
-                            </td>
-
-                            <td><?php
-                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 1 GROUP BY f.file_track_no;");
-                                $sql->bindParam(1, $dept_arr['dept_id']);
-                                $sql->execute();
-                                echo $sql->rowCount();
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no  GROUP BY f.file_track_no;");
-                                $sql->bindParam(1, $dept_arr['dept_id']);
-                                $sql->execute();
-                                echo $sql->rowCount();
-                                ?>
-                            </td>
-                        </tr>
-
-                    <?php
-                    }
-                    ?>
-
-                </tbody>
-            </table>
-            <br>
-            <br>
-            <h5> Officers </h5>
-            <label>Department</label>
-            <br>
             <div class="row">
-                <div class="col-3">
-                    <form class="form">
-                        <select name="deptId" id="" class="form-control" onChange="getOfficersDetails(this.value)">
-                            <option disabled selected>Select Department</option>
-                            <?php
-                            $deptSql = $conn->prepare("SELECT * FROM tbldept WHERE dept_active = 1");
-                            $deptSql->execute();
-                            $departments = $deptSql->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($departments as $department) {
-                            ?>
-                                <option value="<?php echo $department['dept_id'] ?>"><?php echo $department['dept_name'] ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </form>
+                <div class="col text-center text-primary">
+                    <h5 class="btn btn-outline-dark active" id="div_dept_menu">Departments</h5>
+                </div>
+                <div class="col text-center text-primary">
+                    <h5 class="btn btn-outline-dark" id="div_officer_menu">Officers</h5>
+                </div>
+                <div class="col text-center text-primary">
+                    <h5 class="btn btn-outline-dark" id="div_search_menu">Search</h5>
                 </div>
             </div>
-            <div class="row" id="officerDetails">
+            <div id="div_dept">
+                <!-- <h5> Departments </h5> -->
+                <table class="table cell-border" id="myTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Delay Time</th>
+                            <th scope="col">Processing Time</th>
+                            <th scope="col">Pending Files</th>
+                            <th scope="col">Completed Files</th>
+                            <th scope="col">Total Files</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                        <?php
+                        $dept_sql = $conn->prepare("SELECT * FROM tbldept WHERE dept_active = 1");
+                        $dept_sql->execute();
+                        while ($dept_arr = $dept_sql->fetch(PDO::FETCH_ASSOC)) {
+
+                        ?>
+                            <tr>
+                                <td><?= $dept_arr['dept_name'] ?></td>
+                                <td><?php
+                                    $delaySql = $conn->prepare("SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(activity_ack_time, activity_time)))) AS delay_time FROM tblactivity WHERE activity_to IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND activity_type = 'FORWARDED';");
+                                    $delaySql->bindParam(1, $dept_arr['dept_id']);
+                                    $delaySql->execute();
+                                    $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
+                                    $delay_time = explode('.', $delay['delay_time']);
+                                    $days = explode(':', $delay_time[0]);
+                                    $day = (int)((int)$days[0] / 24);
+                                    echo $delay_time[0] . " (" . $day . " Days)";
+                                    ?></td>
+                                <td><?php
+                                    $delaySql = $conn->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(activity_time_taken, activity_ack_time)))) AS working_time FROM tblactivity WHERE activity_to IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?);");
+                                    $delaySql->bindParam(1, $dept_arr['dept_id']);
+                                    $delaySql->execute();
+                                    $delay = $delaySql->fetch(PDO::FETCH_ASSOC);
+                                    $delay_time = explode('.', $delay['working_time']);
+                                    $days = explode(':', $delay_time[0]);
+                                    $day = (int)((int)$days[0] / 24);
+                                    echo $delay_time[0] . " (" . $day . " Days)";
+                                    ?></td>
+                                <td><?php
+                                    $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 0 GROUP BY f.file_track_no;");
+                                    $sql->bindParam(1, $dept_arr['dept_id']);
+                                    $sql->execute();
+                                    echo $sql->rowCount();
+                                    ?>
+                                </td>
+
+                                <td><?php
+                                    $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no AND f.file_completed = 1 GROUP BY f.file_track_no;");
+                                    $sql->bindParam(1, $dept_arr['dept_id']);
+                                    $sql->execute();
+                                    echo $sql->rowCount();
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    $sql = $conn->prepare("SELECT * FROM tblfile f, tblactivity a WHERE a.activity_from IN (SELECT officer_id FROM tblofficer WHERE officer_dept_id = ?) AND f.file_track_no = a.activity_file_track_no  GROUP BY f.file_track_no;");
+                                    $sql->bindParam(1, $dept_arr['dept_id']);
+                                    $sql->execute();
+                                    echo $sql->rowCount();
+                                    ?>
+                                </td>
+                            </tr>
+
+                        <?php
+                        }
+                        ?>
+
+                    </tbody>
+                </table>
+                <br>
+                <br>
             </div>
-
-            <br>
-            <h5> Search Files </h5>
-            <br>
-            <form class="form" name="adfiles" method="POST">
-
-                <div class="row text-center ">
-                    <div class="col">
-                        <input type="date" class="form-control" id="s_date" placeholder="Start Date" name="sdate" required>
-                    </div>
-                    <div class="col">
-                        <input type="date" class="form-control" id="e_date" placeholder="End Date" name="edate" required>
-                    </div>
-                    <div class="col">
-                        <input type="button" class="btn btn-primary" value="Search" onClick=getFileList()>
+            <div id="div_officer">
+                <!-- <h5> Officers </h5> -->
+                <label>Department</label>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <form class="form">
+                            <select name="deptId" id="" class="form-control" onChange="getOfficersDetails(this.value)">
+                                <option disabled selected>Select Department</option>
+                                <?php
+                                $deptSql = $conn->prepare("SELECT * FROM tbldept WHERE dept_active = 1");
+                                $deptSql->execute();
+                                $departments = $deptSql->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($departments as $department) {
+                                ?>
+                                    <option value="<?php echo $department['dept_id'] ?>"><?php echo $department['dept_name'] ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </form>
                     </div>
                 </div>
-            </form>
-            <div id="list">
+                <div class="row" id="officerDetails">
+
+                </div>
+
+                <br>
+            </div>
+            <div id="div_search">
+                <!-- <h5> Search Files </h5> -->
+                <br>
+                <form class="form" name="adfiles" method="POST">
+
+                    <div class="row text-center ">
+                        <div class="col">
+                            <label>From:</label>
+                            <input type="date" class="form-control" id="s_date" placeholder="Start Date" name="sdate" required>
+                        </div>
+                        <div class="col">
+                            <label>To:</label>
+                            <input type="date" class="form-control" id="e_date" placeholder="End Date" name="edate" required>
+                        </div>
+                        <div class="col">
+                            <input type="button" class="btn btn-primary" value="Search Files" onClick=getFileList()>
+                        </div>
+                    </div>
+                </form>
+                <div id="list">
+                </div>
             </div>
         </div>
         <br><br>
-
     </div>
-
     <?php include '../footer.php'; ?>
     </body>
     <script>
@@ -350,6 +367,44 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
             $('#myTable').DataTable();
             $('#myTable1').DataTable();
         });
+
+        $('#div_dept').show();
+        $('#div_search').hide();
+        $('#div_officer').hide();
+
+        $('#div_dept_menu').click(function() {
+            $('#div_dept').show(function() {
+                $('#div_dept_menu').addClass('active')
+            });
+            $('#div_search').hide(function() {
+                $('#div_search_menu').removeClass('active')
+            });
+            $('#div_officer').hide(function() {
+                $('#div_officer_menu').removeClass('active')
+            });
+        })
+        $('#div_search_menu').click(function() {
+            $('#div_search').show(function() {
+                $('#div_search_menu').addClass('active')
+            });
+            $('#div_dept').hide(function() {
+                $('#div_dept_menu').removeClass('active')
+            });
+            $('#div_officer').hide(function() {
+                $('#div_officer_menu').removeClass('active')
+            });
+        })
+        $('#div_officer_menu').click(function() {
+            $('#div_officer').show(function() {
+                $('#div_officer_menu').addClass('active')
+            });
+            $('#div_search').hide(function() {
+                $('#div_search_menu').removeClass('active')
+            });
+            $('#div_dept').hide(function() {
+                $('#div_dept_menu').removeClass('active')
+            });
+        })
     </script>
 
     </html>

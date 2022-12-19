@@ -7,22 +7,33 @@ if (isset($_POST['fileUpload'])) {
     $fileDocPath = '';
     $fileTrack = $_POST['fileTrack'];
     $fileTitle = $_POST['fileTitle'];
-    
+
     if ($fileDoc != '') {
         $fileSize = $_FILES['upFile']['size'];
-        
-        if ($fileSize > 10485760){
+
+        if ($fileSize > 10485760) {
             echo '<script>alert("File Size limit exceeded.");</script>';
-            echo "<script>window.open('../workFile.php?trackNo=".$fileTrack."','_self')</script>";
+            echo "<script>window.open('../workFile.php?trackNo=" . $fileTrack . "','_self')</script>";
             exit();
         }
 
         $fileType = $_FILES['upFile']['type'];
         $fileTmp = $_FILES['upFile']['tmp_name'];
-        $extEx = explode('.', $fileTmp);
-        $ext = $extEx[1]; 
-        $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
-        if (!in_array($ext, $allowedFiles)){
+        $extEx = explode('.', $fileDoc);
+        $size = sizeof($extEx);
+        $ext = $extEx[$size - 1];
+        
+        $allowedFiles = array();
+        // $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
+        
+        
+        $xml = simplexml_load_file("../../settings.xml");
+        $array = array();
+        foreach ($xml->fileType as $child) {
+            array_push($allowedFiles, strval($child[0]));
+        }
+
+        if (!in_array($ext, $allowedFiles)) {
             echo '<script>alert("Please upload valid file.");</script>';
             echo "<script>window.open('../dashboard.php','_self')</script>";
             unset($_POST['fileUpload']);
@@ -41,7 +52,7 @@ if (isset($_POST['fileUpload'])) {
         } else {
             $DocDone = 1;
         }
-        if($DocDone == 1){
+        if ($DocDone == 1) {
             $addDocSql = $conn->prepare("INSERT INTO `tbldocument` (`document_file_track_no`, `document_title`, `document_path`, `document_by`) VALUES (?, ?, ?, ?)");
             $addDocSql->bindParam(1, $fileTrack);
             $addDocSql->bindParam(2, $fileTitle);
@@ -59,7 +70,7 @@ if (isset($_POST['fileUpload'])) {
             $addActSql->bindParam(5, $today);
             $addActSql->execute();
 
-            echo "<script>window.open('../workFile.php?trackNo=".$fileTrack."','_self')</script>";
+            echo "<script>window.open('../workFile.php?trackNo=" . $fileTrack . "','_self')</script>";
         }
     } else {
         echo "<script>window.alert(`Bad Request`)</script>";

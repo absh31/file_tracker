@@ -19,9 +19,19 @@ if (isset($_POST['fileUpload']) && $_SESSION['id']) {
 
         $fileType = $_FILES['upFile']['type'];
         $fileTmp = $_FILES['upFile']['tmp_name'];
-        $extEx = explode('.', $fileTmp);
-        $ext = $extEx[1];
-        $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
+        $extEx = explode('.', $fileDoc);
+        $size = sizeof($extEx);
+        $ext = $extEx[$size - 1];
+        
+        $allowedFiles = array();
+        // $allowedFiles = array('pdf', 'jpeg', 'png', 'jpg', 'docx', 'xlsx');
+        
+        $xml = simplexml_load_file("../../settings.xml");
+        $array = array();
+        foreach ($xml->fileType as $child) {
+            array_push($allowedFiles, strval($child[0]));
+        }
+
         if (!in_array($ext, $allowedFiles)) {
             echo '<script>alert("Please upload valid file.");</script>';
             echo "<script>window.open('../dashboard.php','_self')</script>";
