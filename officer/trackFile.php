@@ -17,7 +17,70 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 ?>
         <br>
         <div class="container">
-            <div class="row">
+        <div class="row">
+            <h5 class="text-bold">Pending Files<br></h5>
+            <?php
+            $file_sql = $conn->prepare("SELECT * FROM tblfile WHERE file_active = 1 AND file_completed = 0");
+            $file_sql->execute();
+            $files = $file_sql->fetchAll(PDO::FETCH_ASSOC);
+            // print_r($files);
+            ?>
+            <table class="table cell-border" id="myTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr. No.</th>
+                        <th scope="col">Tracking No.</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Concerned Person</th>
+                        <th scope="col">Current Holder</th>
+                        <th scope="col">Added By</th>
+                        <th scope="col">Added Time</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sr_no = 1;
+                    foreach ($files as $file) {
+                        $fileadd_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                        $fileadd_sql->bindParam(1, $file['file_added_by']);
+                        $fileadd_sql->execute();
+                        $fileadd = $fileadd_sql->fetch(PDO::FETCH_ASSOC);
+
+                        if ($file['file_current_holder'] == 0) {
+                            $filecurr['officer_name'] = '<div class="text-danger" >N/A</div>';
+                        } elseif ($file['file_current_holder'] == -1) {
+                            $filecurr['officer_name'] = '<div class="text-danger" >N/A</div>';
+                        } else {
+
+                            $filecurr_sql = $conn->prepare("SELECT * FROM tblofficer WHERE officer_id = ?");
+                            $filecurr_sql->bindParam(1, $file['file_current_holder']);
+                            $filecurr_sql->execute();
+                            $filecurr = $filecurr_sql->fetch(PDO::FETCH_ASSOC);
+
+                        }
+                    ?>
+                        <tr>
+                            <form action="./trackFile.php" method="GET">
+                            <th scope="row"><?php echo $sr_no; ?></th>
+                            <td><a href="./trackFile.php?trackNo=<?php echo $file['file_track_no']; ?>&trackFile=Track" target="_blank"><?php echo $file['file_track_no']; ?></a></td>
+                            <td><?php echo $file['file_title'] ?></td>
+                            <td><?php echo $file['file_person_name'] ?></td>
+                            <td><?php echo $filecurr['officer_name'] ?></td>
+                            <td><?php echo $fileadd['officer_name'] ?></td>
+                            <td><?php echo $file['file_time'] ?></td>
+                            <td>
+                                    <input class="form-control" type="text" name="trackNo" id="track_no" required hidden value="<?=$file['file_track_no']?>">
+                                    <input class="btn btn-dark px-5" type="submit" name="trackFile" value="Track">
+                                </td>
+                            </form>
+                        </tr>
+                    <?php $sr_no++;
+                    } ?>
+                </tbody>
+            </table>
+        </div>
+            <!-- <div class="row">
                 <div class="col">
                     <h5>Track File</h5>
                 </div>
@@ -36,7 +99,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     <div class="col text-center">
                         <input class="btn btn-dark px-5" type="submit" name="trackFile" value="Track">
                     </div>
-            </form>
+            </form> -->
 
             <?php
             if (isset($_GET['trackFile'])) {
@@ -161,6 +224,8 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     <br>
                     <br>
                     <br>
+
+                    
 
                     <div class="row">
                         <h5>Activity Timeline</h5>
