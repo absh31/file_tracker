@@ -7,8 +7,8 @@
 
         // if (isset($_POST['fileId'])) {
             $fileId = $_POST['fileId'];
-
-            $deleteFileSql = $conn->prepare("UPDATE tblfile SET file_active = -1 WHERE file_id = ?");
+            echo $fileId;
+            $deleteFileSql = $conn->prepare("UPDATE tblfile SET file_active = '-1'WHERE file_id = ?");
             $deleteFileSql->bindParam(1, $fileId);
             if ($deleteFileSql->execute()) {
                 echo "<script>window.alert(`File Deleted Successfully`)</script>";
