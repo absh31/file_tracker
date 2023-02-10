@@ -108,9 +108,9 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             if (isset($_GET['trackFile'])) {
 
                 $trackNo = $_GET['trackNo'];
-                $sql = $conn->prepare("SELECT * FROM tblfile f, (SELECT activity_to, activity_file_track_no FROM tblactivity WHERE activity_file_track_no = ? ) as a WHERE a.activity_file_track_no = f.file_track_no AND a.activity_to = ? GROUP BY f.file_track_no");
+                $sql = $conn->prepare("SELECT * FROM tblfile f, (SELECT activity_to, activity_file_track_no FROM tblactivity WHERE activity_file_track_no = ? ) as a WHERE a.activity_file_track_no = f.file_track_no GROUP BY f.file_track_no");
                 $sql->bindParam(1, $trackNo);
-                $sql->bindParam(2, $_SESSION['id']);
+                // $sql->bindParam(2, $_SESSION['id']);
                 $sql->execute();
                 $key = $sql->fetch(PDO::FETCH_ASSOC);
                 if ($sql->rowCount() == 0) {
@@ -330,12 +330,13 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             document.getElementById("my-nav").classList.remove('active');
             document.getElementById("dash-nav").classList.remove('active');
             $(document).ready(function() {
-                $('#myTable').DataTable();
+                // $('#myTable').DataTable();
             });
             $(document).ready(function() {
             $(".delete").on('click', function() {
                 if (confirm("Are you sure you want to delete")) {
                     var id = $(this).attr("id");
+                    console.log(id)
                     $.ajax({
                         type: "POST",
                         url: "backend/deleteFile.php",
@@ -344,12 +345,15 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         },
                         success: function(response) {
                             window.location.reload();
+                            // console.log(response)
                         }
                     });
                 }
             })
         });
         </script>
+        </body>
+        </html>
 <?php
     }
 } else {
