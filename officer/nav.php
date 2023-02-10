@@ -4,7 +4,7 @@
     // echo $_SERVER['PHP_SELF'];
     if ($_SERVER['PHP_SELF'] != '/file_tracker/index.php') {
     ?>
-        <div class="container-fluid" style="background-color : #FFFFFF">
+        <div class="container-fluid px-5" style="background-color : #FFFFFF">
             <div class="row mx-5 py-2">
                 <div class="col mt-3" id="logo1">
                     <img src="../uploads/images/logo1.png" alt="">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark" id="navigation" style="background-color : black">
-            <div class="container-fluid">
+            <div class="container-fluid px-5">
                 <a class="navbar-brand" href="./" style="font-weight: 800;">
                     FILE TRACKER
                 </a>

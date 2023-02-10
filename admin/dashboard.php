@@ -11,13 +11,12 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
     include '../getFT.php';
 ?>
     <br>
-    <div class="container">
+    <div class="container-fluid px-5">
         <div class="row">
             <div class="col">
                 <h5>Hey, <?= ucwords($_SESSION['officer_name']) ?></h5>
             </div>
-            <h3 class="dept-title">Dashboard</h3>
-            <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
+            <div class="px-3 mb-4 pt-3 apply">
                 <div class="row">
                     <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Added</h6>
                     <div class="col-sm">
@@ -74,7 +73,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
                 <br>
             </div>
 
-            <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
+            <div class="px-3 mb-4 pt-3 apply">
                 <div class="row">
                     <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Files Status</h6>
 
@@ -128,7 +127,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
                 <br>
             </div>
 
-            <div class="px-4 mb-4 pt-3 apply" style="border: 1px solid #003865;">
+            <div class="px-3 mb-4 pt-3 apply">
                 <div class="row">
                     <h6 class="card-title text-left font-weight-bold" style="font-size: 30px; color: #003975;">Office</h6>
 
