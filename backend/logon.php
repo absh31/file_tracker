@@ -2,19 +2,19 @@
 session_start();
 include '../connection.php';
 if (isset($_POST['AuthLogin'])) {
-    if (empty($_POST['g-recaptcha-response'])) {
-        echo "<script>alert('Captcha Error. Try Again')</script>";
-        echo "<script>window.open('../','_self')</script>";
-    } else {
-        $secret_key = '6Lewa-AZAAAAAP729KyiNYyJGV7TnGheI0WUlf6p';
-        $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response']);
+    // if (empty($_POST['g-recaptcha-response'])) {
+    //     echo "<script>alert('Captcha Error. Try Again')</script>";
+    //     echo "<script>window.open('../','_self')</script>";
+    // } else {
+    //     $secret_key = '6Lewa-AZAAAAAP729KyiNYyJGV7TnGheI0WUlf6p';
+    //     $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response']);
 
-        $response_data = json_decode($response);
+    //     $response_data = json_decode($response);
 
-        if (!$response_data->success) {
-            echo "<script>alert('Captcha Error. Try Again')</script>";
-            echo "<script>window.open('../','_self')</script>";
-        } else {
+    //     if (!$response_data->success) {
+    //         echo "<script>alert('Captcha Error. Try Again')</script>";
+    //         echo "<script>window.open('../','_self')</script>";
+    //     } else {
             $uname = htmlspecialchars($_POST['username']);
             $pass = md5($_POST['password']);
             // $type = htmlspecialchars($_POST['type']);
@@ -42,7 +42,7 @@ if (isset($_POST['AuthLogin'])) {
                 echo "<script>alert('Invalid Credentials')</script>";
                 echo "<script>window.open('../','_self')</script>";
             }
-        }
-    }
+    //     }
+    // }
 }
 ?>
