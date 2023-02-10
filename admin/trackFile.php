@@ -16,7 +16,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     if ($key['role_name'] == "Admin") {
 ?>
         <br>
-        <div class="container">
+        <div class="container-fluid px-5">
             <div class="row">
                 <div class="col">
                     <h5>Track File</h5>
