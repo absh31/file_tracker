@@ -70,9 +70,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                             <td><?php echo $fileadd['officer_name'] ?></td>
                             <td><?php echo $file['file_time'] ?></td>
                             <td>
-                                    <input class="form-control" type="text" name="trackNo" id="track_no" required hidden value="<?=$file['file_track_no']?>">
-                                    <input class="btn btn-dark px-5" type="submit" name="trackFile" value="Track">
-                                </td>
+                                <input class="form-control" type="text" name="trackNo" id="track_no" required hidden value="<?=$file['file_track_no']?>">
+                                <input class="btn btn-dark px-2" type="submit" name="trackFile" value="Track">
+                                <br>
+                                <br>
+                                <button class="btn btn-danger text-light delete" id="<?php echo $file['file_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                            </td>
                             </form>
                         </tr>
                     <?php $sr_no++;
@@ -329,6 +332,23 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             $(document).ready(function() {
                 $('#myTable').DataTable();
             });
+            $(document).ready(function() {
+            $(".delete").on('click', function() {
+                if (confirm("Are you sure you want to delete")) {
+                    var id = $(this).attr("id");
+                    $.ajax({
+                        type: "POST",
+                        url: "backend/deleteFile.php",
+                        data: {
+                            fileId: id
+                        },
+                        success: function(response) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            })
+        });
         </script>
 <?php
     }
