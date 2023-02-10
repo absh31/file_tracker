@@ -32,17 +32,17 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="png" <?php if(in_array('png', $array)){echo 'checked';}?>/> PNG<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="pdf" <?php if(in_array('pdf', $array)){echo 'checked';}?>/> PDF<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('xlsx', $array)){echo 'checked';}?>/> XLSX<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('doc', $array)){echo 'checked';}?>/> DOC<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('docx', $array)){echo 'checked';}?>/> DOCX<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('txt', $array)){echo 'checked';}?>/> TXT<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('ppt', $array)){echo 'checked';}?>/> PPT<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('pptx', $array)){echo 'checked';}?>/> PPTX<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('odp', $array)){echo 'checked';}?>/> ODP<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('rtf', $array)){echo 'checked';}?>/> RTF<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('zip', $array)){echo 'checked';}?>/> ZIP<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('rar', $array)){echo 'checked';}?>/> RAR<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('csv', $array)){echo 'checked';}?>/> CSV<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('tar', $array)){echo 'checked';}?>/> TAR<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="doc" <?php if(in_array('doc', $array)){echo 'checked';}?>/> DOC<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="docs" <?php if(in_array('docx', $array)){echo 'checked';}?>/> DOCX<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="txt" <?php if(in_array('txt', $array)){echo 'checked';}?>/> TXT<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="ppt" <?php if(in_array('ppt', $array)){echo 'checked';}?>/> PPT<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="pptx" <?php if(in_array('pptx', $array)){echo 'checked';}?>/> PPTX<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="odp" <?php if(in_array('odp', $array)){echo 'checked';}?>/> ODP<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="rtf" <?php if(in_array('rtf', $array)){echo 'checked';}?>/> RTF<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="zip" <?php if(in_array('zip', $array)){echo 'checked';}?>/> ZIP<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="rar" <?php if(in_array('rar', $array)){echo 'checked';}?>/> RAR<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="csv" <?php if(in_array('csv', $array)){echo 'checked';}?>/> CSV<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="tar" <?php if(in_array('tar', $array)){echo 'checked';}?>/> TAR<br/>
 
                 <input class="btn btn-submit btn-success" type="submit" name="fileUploadType" value="Allow" />
 <!-- doc, docx, txt, ppt, pptx, odp, rtf, zip, rar, csv, tar,   -->
