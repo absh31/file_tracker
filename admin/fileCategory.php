@@ -34,31 +34,33 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                         <th scope="col">Sr. No.</th>
                         <th scope="col">Name</th>
                         <th scope="col">Document</th>
+                        <th scope="col">Category Information</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                        $sr_no = 1;
-                        foreach($cats as $cat){
+                    $sr_no = 1;
+                    foreach ($cats as $cat) {
                     ?>
-                    <tr>
-                        <th scope="row"><?php echo $sr_no; ?></th>
-                        <td><a href="<?php echo './fileCat.php?id='.$cat['filecat_id'];?>" target="_blank"><?php echo $cat['filecat_name'] ?></td>
-                        <?php if ($cat['filecat_doc_path'] == ''){
-                            echo '<td class="text-danger">No Document</td>';
-                        }else{
+                        <tr>
+                            <th scope="row"><?php echo $sr_no; ?></th>
+                            <td><a href="<?php echo './fileCat.php?id=' . $cat['filecat_id']; ?>" target="_blank"><?php echo $cat['filecat_name'] ?></td>
+                            <?php if ($cat['filecat_doc_path'] == '') {
+                                echo '<td class="text-danger">No Document</td>';
+                            } else {
                             ?>
-                            <td><a class="btn btn-dark" href="../uploads<?php echo $cat['filecat_doc_path']; ?>" target="_blank">View</a></td>
+                                <td><a class="btn btn-dark" href="../uploads<?php echo $cat['filecat_doc_path']; ?>" target="_blank">View</a></td>
                             <?php
-                        }  ?>
-                        
-                        <td>
-                            <a href="editFileCat.php?id=<?php echo $cat['filecat_id'] ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp; 
-                            <button class="btn btn-danger text-light delete" id="<?php echo $cat['filecat_id'] ?>"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <?php $sr_no++; } ?>
+                            }  ?>
+                            <td><?= $cat['filecat_format'] ?></td>
+                            <td>
+                                <a href="editFileCat.php?id=<?php echo $cat['filecat_id'] ?>" class="btn btn-primary text-light"><i class="fa-solid fa-pen-to-square"></i></a> &nbsp;
+                                <button class="btn btn-danger text-light delete" id="<?php echo $cat['filecat_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    <?php $sr_no++;
+                    } ?>
                 </tbody>
             </table>
         </div>
@@ -71,18 +73,18 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         document.getElementById('file-nav').classList.remove('active');
         document.getElementById("manage-nav").classList.add('active');
         document.getElementById("dash-nav").classList.remove('active');
-        $(document).ready(function () {
-            $(".delete").on('click', function(){
-                if(confirm("Are you sure you want to delete")){
+        $(document).ready(function() {
+            $(".delete").on('click', function() {
+                if (confirm("Are you sure you want to delete")) {
                     var id = $(this).attr("id");
                     $.ajax({
                         type: "POST",
                         url: "backend/deleteFileCat.php",
                         data: {
-                            fileCatId : id
+                            fileCatId: id
                         },
-                        success: function (response) {
-                          window.location.reload();  
+                        success: function(response) {
+                            window.location.reload();
                         }
                     });
                 }
