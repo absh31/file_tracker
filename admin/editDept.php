@@ -12,7 +12,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     $key = $sql->fetch(PDO::FETCH_ASSOC);
 ?>
     <br>
-    <div class="container">
+    <div class="container-fluid px-5">
         <div class="row">
             <div class="col">
                 <h5>Edit Department</h5>
