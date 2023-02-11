@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 } else {
 ?>
     <br>
-    <div class="container">
+    <div class="container-fluid px-5">
         <div class="row">
             <div class="col">
                 <h5>Add File</h5>

@@ -8,7 +8,7 @@ include './nav.php';
 if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 ?>
     <br>
-    <div class="container-fluid col-10">
+    <div class="container-fluid px-5">
         <div class="row">
             <div class="col">
                 <h4>My Files</h4>

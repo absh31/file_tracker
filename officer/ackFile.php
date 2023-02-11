@@ -9,7 +9,7 @@ include './nav.php';
 if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
 ?>
     <br>
-    <div class="container">
+    <div class="container-fluid px-5">
         <?php if (isset($_GET['id']) && isset($_GET['actId']) && $_GET['trackNo']) {
             $actId = $_GET['actId'];
             $fileId = $_GET['id'];

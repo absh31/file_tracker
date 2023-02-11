@@ -9,7 +9,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['auth'])) {
     include("./nav.php");
 ?>
     <br />
-    <div class="container">
+    <div class="container-fluid px-5">
         <div class="col-md-5 mx-auto my-5 p-4">
             <div class="row">
                 <div class="col text-center">

@@ -8,10 +8,10 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
         if (isset($_POST['fileId'])) {
             $fileId = $_POST['fileId'];
 
-            $deleteFileSql = $conn->prepare("UPDATE tblfile SET file_active = 0 WHERE file_id = ?");
+            $deleteFileSql = $conn->prepare("UPDATE tblfile SET file_active = 1 WHERE file_id = ?");
             $deleteFileSql->bindParam(1, $fileId);
             if ($deleteFileSql->execute()) {
-                echo "<script>window.alert(`File Deleted Successfully`)</script>";
+                echo "<script>window.alert(`File Restored Successfully`)</script>";
                 echo "<script>window.open('../dept.php','_self')</script>";
             }
         }

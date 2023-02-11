@@ -1,7 +1,7 @@
 <body>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <div class="container-fluid px-5" style="background-color : #FFFFFF">
-        <div class="row mx-5 py-2">
+        <div class="row py-2">
             <div class="col mt-3" id="logo1">
                 <img src="../uploads/images/logo1.png" alt="">
             </div>

@@ -33,7 +33,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="pdf" <?php if(in_array('pdf', $array)){echo 'checked';}?>/> PDF<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="xlsx" <?php if(in_array('xlsx', $array)){echo 'checked';}?>/> XLSX<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="doc" <?php if(in_array('doc', $array)){echo 'checked';}?>/> DOC<br/>
-                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="docs" <?php if(in_array('docx', $array)){echo 'checked';}?>/> DOCX<br/>
+                <input class="form-check-input" type="checkbox" name="fileUpload[]" value="docx" <?php if(in_array('docx', $array)){echo 'checked';}?>/> DOCX<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="txt" <?php if(in_array('txt', $array)){echo 'checked';}?>/> TXT<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="ppt" <?php if(in_array('ppt', $array)){echo 'checked';}?>/> PPT<br/>
                 <input class="form-check-input" type="checkbox" name="fileUpload[]" value="pptx" <?php if(in_array('pptx', $array)){echo 'checked';}?>/> PPTX<br/>

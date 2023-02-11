@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
     unset($_SESSION['id']);
 ?>
     <br>
-    <div class="container">
+    <div class="container-fluid px-5">
         <div class="row">
             <div class="col">
                 <h5>Hey, <?= ucwords($_SESSION['officer_name']) ?></h5>
