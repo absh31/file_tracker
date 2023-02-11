@@ -167,7 +167,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
     <div class="row" id="deleted_file">
         <h5 class="text-bold">Deleted Files<br></h5>
         <?php
-            $file_sql = $conn->prepare("SELECT * FROM tblfile WHERE file_active = -1");
+            $file_sql = $conn->prepare("SELECT * FROM tblfile, tblactivity WHERE file_active = -1 AND tblfile.file_track_no = tblactivity.activity_file_track_no AND tblactivity.activity_type = 'Deleted From Officer'");
             $file_sql->execute();
             $files = $file_sql->fetchAll(PDO::FETCH_ASSOC);
             ?>
@@ -179,6 +179,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     <th scope="col">Title</th>
                     <th scope="col">Concerned Person</th>
                     <th scope="col">Category</th>
+                    <th scope="col">Reason</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -206,6 +207,7 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                     <td><?php echo $file['file_title'] ?></td>
                     <td><?php echo $file['file_person_name'] ?></td>
                     <td><?php echo $filecat['filecat_name'] ?></td>
+                    <td><?php echo $file['activity_remarks'] ?></td>
                     <td>
                         <button class="btn btn-danger text-light delete" id="<?php echo $file['file_id'] ?>"><i class="fa-solid fa-trash"></i></button>
                         <button class="btn btn-success text-light revert" id="<?php echo $file['file_id'] ?>">Restore</button>

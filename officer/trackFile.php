@@ -76,12 +76,12 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
                                             <br>
                                             <br>
                                             <?php
-                                            
+
                                             // echo $key['role_priority'];
                                             // echo $fileadd['role_priority']; 
                                             if ($key['role_priority'] <= $fileadd['role_priority']) {
                                             ?>
-                                                <button class="btn btn-danger text-light delete" id="<?php echo $file['file_id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                                <button class="btn btn-danger text-light delete" id="<?php echo $file['file_track_no'] ?>"><i class="fa-solid fa-trash"></i></button>
                                             <?php
                                             }
                                             ?>
@@ -370,13 +370,16 @@ if ((isset($_SESSION['username']) && isset($_SESSION['auth']))) {
             });
             $(document).ready(function() {
                 $(".delete").on('click', function() {
+                    let foo = prompt('Enter the reason for delete');
                     if (confirm("Are you sure you want to delete")) {
                         var id = $(this).attr("id");
                         console.log(id)
+                        console.log(foo)
                         $.ajax({
                             type: "POST",
                             url: "backend/deleteFile.php",
                             data: {
+                                reason: foo,
                                 fileId: id
                             },
                             success: function(response) {

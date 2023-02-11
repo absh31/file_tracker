@@ -85,9 +85,8 @@ $officers = $officersSql->fetchAll(PDO::FETCH_ASSOC);
                     $working_time = explode('.', $workingTime['working_time']);
                     $days = explode(':', $working_time[0]);
                     $day = (int)((int)$days[0] / 24);
-                    // echo $workingTime['working_time'];
-
                     ?>
+
                     <td><?php echo $working_time[0] . " (" . $day . " Days)"; ?></td>
 
                     <td><?php
@@ -95,7 +94,18 @@ $officers = $officersSql->fetchAll(PDO::FETCH_ASSOC);
                         ?></td>
                     <td><?= $sql2->rowCount() ?></td>
                     <td><?= $sql4->rowCount() ?></td>
-                    <td><?php echo number_format(getFT($conn, $officer['officer_id']), 2); ?></td>
+                    <?php
+                    $score = number_format(getFT($conn, $officer['officer_id']), 2);
+                    if ($score < 40) {
+                    ?>
+                        <td class="text-danger"><?= $score ?></td>
+                    <?php
+                    } else {
+                    ?>
+                        <td class="text-success"><?= $score ?></td>
+                    <?php
+                    }
+                    ?>
                 </tr>
         <?php
             }
